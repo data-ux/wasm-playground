@@ -1,15 +1,19 @@
 span.ast-node, span.ast-node input{
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
 }
-span.ast-node:before{
-    content: '(';
+span.ast-node.no-children:before{
+    content: ' ';
 }
-span.ast-node:after{
+span.ast-node.has-children:before{
+    content: ' (';
+}
+span.ast-node.has-children:after{
     content: ')';
 }
 span.ast-node input{
     border: 0;
     background-color: #eee;
+    padding: 0 1px;
 }
