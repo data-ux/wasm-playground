@@ -53,6 +53,7 @@ import focus from './focus'
     handleBlur(){
         var node = this.props.node;
         node.changeType(this.state.editable)
+        this.forceUpdate()
     },
     componentDidMount(){
         this.refs.typeName && this.refs.typeName.focus()
@@ -64,10 +65,16 @@ import focus from './focus'
         var children = this.props.node.children.map((child) => {
             return <AstNodeComponent key={child.id} node={child} notifyUp={this.forceUpdate.bind(this)}/>
         });
-        if(children.length){
-            children = (<span className={this.props.node.frozen ? 'ast-node-body multiline' : 'ast-node-body'}>{children}</span>)
+        var classes = ['ast-node']
+        if(this.props.node.children.length){
+            classes.push('has-children')
+        }else{
+            classes.push('no-children')
         }
-        return <span className={this.props.node.children.length ? 'ast-node has-children' : 'ast-node no-children'}>{typeName}{children}</span>
+        if(this.props.node.frozen || this.props.node.type === 'func'){
+             classes.push('multiline')
+        }
+        return <span className={classes.join(' ')}>{typeName}{children}</span>
     }
 });
 

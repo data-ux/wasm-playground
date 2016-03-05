@@ -3,15 +3,12 @@ span.ast-node, span.ast-node input{
     font-weight: 400;
     font-size: 16px;
 }
-span.ast-node input:disabled{
-    background-color: transparent;
-    color: #000;
-}
 span.ast-node.has-children > input{
     font-weight: 600;
 }
 span.ast-node.no-children:before{
     content: ' ';
+    white-space: pre;
 }
 span.ast-node.has-children:before{
     content: ' (';
@@ -24,15 +21,11 @@ span.ast-node input{
     background-color: #eee;
     padding: 0 1px;
 }
-.ast-node-body.multiline{
-    display: block;
+span.ast-node input:disabled{
+    background-color: transparent;
+    color: #000;
+}
+span.ast-node.multiline > span{
     padding-left: 35px;
-}
-.ast-node-body.multiline > span.ast-node.no-children:after{
-    content:"\000A";
-    white-space: pre;
-}
-.ast-node-body.multiline >span.ast-node.has-children:after{
-    content:")\000A";
-    white-space: pre;
+    display: block;
 }
