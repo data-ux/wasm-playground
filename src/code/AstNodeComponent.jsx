@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import focus from './focus'
-import measureText from './measureText'
+import renderers from './renderers'
 
  var AstNodeComponent = React.createClass({
     getInitialState(){
@@ -21,7 +20,7 @@ import measureText from './measureText'
                 }
                 node.changeType(this.state.editable)
                 node.branchOut()
-                this.forceUpdate()
+                this.props.notifyUp()
                 break
             case 'Tab':
                 e.preventDefault()
@@ -36,6 +35,7 @@ import measureText from './measureText'
                 if(this.state.editable.length === 0){
                     e.preventDefault()
                     this.remove()
+                    focus.previousOfType(this.refs.typeName)
                 }
                 break
             case 'ArrowLeft':
@@ -48,10 +48,10 @@ import measureText from './measureText'
                     if(target.selectionStart === this.state.editable.length && target.selectionEnd === this.state.editable.length){
                         e.preventDefault()
                         if(!this.props.node.children.length && node.parent.parent && node.parent.isLastChild(node)){
+                            node.parent.parent.addSiblingAfter(node.parent)
                             if(this.state.editable.trim().length === 0){
                                 this.remove()
                             }
-                            node.parent.parent.addSiblingAfter(node.parent)
                             this.props.notifyUp(2)
                             break
                         }
@@ -64,7 +64,6 @@ import measureText from './measureText'
         var node = this.props.node;
         node.parent.removeChild(node)
         this.props.notifyUp(1)
-        focus.previousOfType(this.refs.typeName)
     },
     handleBlur(){
         if(this.state.editable.trim().length === 0){
@@ -85,26 +84,12 @@ import measureText from './measureText'
         }
     },
     render(){
-        var textWidth = measureText(this.state.editable, this.props.node.children.length)
-        var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 4, 10) + 'px'}}
-                onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
-
-        var children = this.props.node.children.map((child) => {
-            return <AstNodeComponent key={child.id} node={child} notifyUp={this.handleNotify}/>
-        });
-        var classes = ['ast-node']
-        if(this.props.node.children.length){
-            classes.push('has-children')
+        var candidate = renderers[this.props.node.type]
+        if(candidate){
+             return candidate.bind(this)()
         }else{
-            classes.push('no-children')
+            return renderers['generic'].bind(this)()
         }
-        if(this.props.node.frozen || this.props.node.type === 'func'){
-             classes.push('multiline')
-        }
-        if(this.props.node.type === 'func'){
-             classes.push('func')
-        }
-        return <span className={classes.join(' ')}>{typeName}{children}</span>
     }
 });
 
