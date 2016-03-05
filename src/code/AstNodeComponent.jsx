@@ -58,16 +58,15 @@ import focus from './focus'
         this.refs.typeName && this.refs.typeName.focus()
     },
     render(){
-        var typeName;
-        if(!this.props.node.frozen){
-            typeName = <input type='text' ref='typeName' size={Math.max(this.state.editable.length+1, 2)} value={this.state.editable}
-                onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} />
-        }else{
-            typeName = <span>{this.props.node.type}</span>
-        }
+        var typeName = <input type='text' ref='typeName' size={Math.max(this.state.editable.length+1, 2)} value={this.state.editable}
+                onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
+
         var children = this.props.node.children.map((child) => {
             return <AstNodeComponent key={child.id} node={child} notifyUp={this.forceUpdate.bind(this)}/>
         });
+        if(children.length){
+            children = (<span className={this.props.node.frozen ? 'ast-node-body multiline' : 'ast-node-body'}>{children}</span>)
+        }
         return <span className={this.props.node.children.length ? 'ast-node has-children' : 'ast-node no-children'}>{typeName}{children}</span>
     }
 });
