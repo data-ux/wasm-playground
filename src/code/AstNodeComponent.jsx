@@ -15,7 +15,7 @@ import focus from './focus'
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
-                if(this.state.editable.length <= 1){
+                if(this.state.editable.trim().length === 0){
                     break
                 }
                 node.changeType(this.state.editable)
@@ -24,6 +24,9 @@ import focus from './focus'
                 break
             case 'Tab':
                 e.preventDefault()
+                if(this.state.editable.trim().length === 0){
+                    break
+                }
                 node.changeType(this.state.editable)
                 node.parent.addSiblingAfter(node)
                 this.props.notifyUp()
@@ -31,9 +34,7 @@ import focus from './focus'
             case 'Backspace':
                 if(this.state.editable.length === 0){
                     e.preventDefault()
-                    node.parent.removeChild(node)
-                    this.props.notifyUp()
-                    focus.previousOfType(target)
+                    this.remove()
                 }
                 break
             case 'ArrowLeft':
@@ -45,12 +46,29 @@ import focus from './focus'
             case 'ArrowRight':
                     if(target.selectionStart === this.state.editable.length && target.selectionEnd === this.state.editable.length){
                         e.preventDefault()
+                        if(node.parent.parent && node.parent.parent.isLastChild(node.parent)){
+                            if(this.state.editable.trim().length === 0){
+                                this.remove()
+                            }
+                            node.parent.parent.addSiblingAfter(node.parent)
+                            this.props.notifyUp(2)
+                            break
+                        }
                         focus.nextOfType(target)
                     }
                 break
         }
     },
+    remove(){
+        var node = this.props.node;
+        node.parent.removeChild(node)
+        this.props.notifyUp(1)
+        focus.previousOfType(this.refs.typeName)
+    },
     handleBlur(){
+        if(this.state.editable.trim().length === 0){
+            this.remove()
+        }
         var node = this.props.node;
         node.changeType(this.state.editable)
         this.forceUpdate()
@@ -58,12 +76,19 @@ import focus from './focus'
     componentDidMount(){
         this.refs.typeName && this.refs.typeName.focus()
     },
+    handleNotify(generations){
+        if(generations === 1){
+            this.forceUpdate()
+        }else{
+            this.props.notifyUp(generations - 1)
+        }
+    },
     render(){
-        var typeName = <input type='text' ref='typeName' size={Math.max(this.state.editable.length+1, 2)} value={this.state.editable}
+        var typeName = <input type='text' ref='typeName' size={Math.max(this.state.editable.length+1, 1)} value={this.state.editable}
                 onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
 
         var children = this.props.node.children.map((child) => {
-            return <AstNodeComponent key={child.id} node={child} notifyUp={this.forceUpdate.bind(this)}/>
+            return <AstNodeComponent key={child.id} node={child} notifyUp={this.handleNotify}/>
         });
         var classes = ['ast-node']
         if(this.props.node.children.length){

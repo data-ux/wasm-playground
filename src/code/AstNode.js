@@ -46,4 +46,12 @@ export default class AstNode {
         }
         this.frozen = bool;
     }
+    isLastChild(child){
+        var index = this.children.indexOf(child)
+        if(index === this.children.length - 1){
+            return true
+        }else{
+            return false
+        }
+    }
 }

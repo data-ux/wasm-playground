@@ -5,6 +5,16 @@ import AstNode from './AstNode'
 
 var rootNode = new AstNode('module')
 rootNode.addChild( new AstNode('', rootNode) )
-rootNode.setFrozen(true);
+rootNode.setFrozen(true)
 
-ReactDOM.render(<AstNodeComponent node={rootNode}/>, document.getElementById('wastedit-main'))
+var RootComponent = React.createClass({
+    handleNotify(){
+        this.forceUpdate()
+    },
+    render(){
+        return <AstNodeComponent node={this.props.root} notifyUp={this.handleNotify}/>
+    }
+})
+
+
+ReactDOM.render(<RootComponent root={rootNode} />, document.getElementById('wastedit-main'))
