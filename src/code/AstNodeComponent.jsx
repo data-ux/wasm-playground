@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import focus from './focus'
+import measureText from './measureText'
 
  var AstNodeComponent = React.createClass({
     getInitialState(){
@@ -46,7 +47,7 @@ import focus from './focus'
             case 'ArrowRight':
                     if(target.selectionStart === this.state.editable.length && target.selectionEnd === this.state.editable.length){
                         e.preventDefault()
-                        if(node.parent.parent && node.parent.parent.isLastChild(node.parent)){
+                        if(!this.props.node.children.length && node.parent.parent && node.parent.isLastChild(node)){
                             if(this.state.editable.trim().length === 0){
                                 this.remove()
                             }
@@ -84,7 +85,8 @@ import focus from './focus'
         }
     },
     render(){
-        var typeName = <input type='text' ref='typeName' size={Math.max(this.state.editable.length+1, 1)} value={this.state.editable}
+        var textWidth = measureText(this.state.editable, this.props.node.children.length)
+        var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 4, 10) + 'px'}}
                 onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
 
         var children = this.props.node.children.map((child) => {
