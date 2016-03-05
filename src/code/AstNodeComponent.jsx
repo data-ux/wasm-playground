@@ -74,6 +74,9 @@ import focus from './focus'
         if(this.props.node.frozen || this.props.node.type === 'func'){
              classes.push('multiline')
         }
+        if(this.props.node.type === 'func'){
+             classes.push('func')
+        }
         return <span className={classes.join(' ')}>{typeName}{children}</span>
     }
 });

@@ -3,6 +3,9 @@ span.ast-node, span.ast-node input{
     font-weight: 400;
     font-size: 16px;
 }
+span.ast-node{
+    line-height: 24px;
+}
 span.ast-node.has-children > input{
     font-weight: 600;
 }
@@ -19,7 +22,7 @@ span.ast-node.has-children:after{
 span.ast-node input{
     border: 0;
     background-color: #eee;
-    padding: 0 1px;
+    padding: 0 1px 1px 1px;
 }
 span.ast-node input:disabled{
     background-color: transparent;
@@ -28,4 +31,8 @@ span.ast-node input:disabled{
 span.ast-node.multiline > span{
     padding-left: 35px;
     display: block;
+}
+span.ast-node.multiline.func > span:nth-of-type(1), span.ast-node.multiline.func > span:nth-of-type(2){
+    padding-left: 0;
+    display: inline;
 }
