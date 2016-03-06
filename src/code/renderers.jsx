@@ -2,7 +2,9 @@ import React from 'react'
 import measureText from './measureText'
 import AstNodeComponent from './AstNodeComponent'
 
-function generic(childCallback){
+var varName = /^\$/g
+
+function generic(childCallback, selfNewline){
         var textWidth = measureText(this.state.editable, this.props.node.children.length)
         var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 2, 10) + 'px'}}
                 onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
@@ -21,7 +23,7 @@ function generic(childCallback){
         }else{
             classes.push('no-children')
         }
-        if(this.props.newline){
+        if(this.props.newline || selfNewline){
              classes.push('newline')
         }
         return <span className={classes.join(' ')}>{typeName}{children}</span>
@@ -37,9 +39,41 @@ function func(){
             })
     })
 }
+function afterNames(){
+    return generic.bind(this)( () => {
+        var inBlock = false
+        return this.props.node.children.map((child, i) => {
+                if(!varName.test(child.type)){
+                    inBlock = true
+                }
+                return <AstNodeComponent key={child.id} node={child} notifyUp={this.handleNotify} newline={inBlock}/>
+            })
+    }, true)
+}
+function tableswitch(){
+    return generic.bind(this)( () => {
+        var inBlock = false
+        return this.props.node.children.map((child, i) => {
+                if(child.type === 'table'){
+                    inBlock = true;
+                }
+                return <AstNodeComponent key={child.id} node={child} notifyUp={this.handleNotify} newline={inBlock}/>
+            })
+    }, true)
+}
+function alwaysBlock(){
+    return generic.bind(this)( () => {
+        var inBlock = true
+        return this.props.node.children.map((child, i) => {
+                return <AstNodeComponent key={child.id} node={child} notifyUp={this.handleNotify} newline={inBlock}/>
+            })
+    })
+}
 var renderers = {
     generic,
-    func
+    func,
+    block: afterNames,
+    tableswitch
 }
 
 export default renderers
