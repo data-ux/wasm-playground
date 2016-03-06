@@ -1,13 +1,67 @@
 var idBase = 0;
 
 export default class AstNode {
-    constructor(type, parent) {
+    constructor(type, parent, children) {
         if(parent instanceof AstNode){
             this.parent = parent;
         }
+        if(Array.isArray(children)){
+            children.forEach( (child) => {
+                if(!(child instanceof AstNode)) throw new TypeError('All children must be <AstNode>')
+                child.parent = this
+            })
+            this.children = children
+        }else{
+            this.children = []
+        }
         this.changeType(type)
-        this.children = []
         this.id = idBase++;
+    }
+    static stringify(node){
+        if(!(node instanceof AstNode)){
+            throw new TypeError('Can only serialize <AstNode>')
+        }
+        return JSON.stringify(node, function(key, value){
+            if(Array.isArray(this)){
+                if(!(value instanceof AstNode)) throw new TypeError('All children must be <AstNode>')
+                return value
+            }else{
+                switch (key) {
+                    case '':
+                        return value
+                    case 'type':
+                        if(typeof value !== 'string') throw new TypeError('Field named "type" must be <String>')
+                        return value
+                    case 'children':
+                        if(!Array.isArray(value)) throw new TypeError('Field named "children" must be <Array>')
+                        return value.length > 0 ? value : undefined
+                    default:
+                        return undefined
+                }
+            }
+        });
+    }
+    static parse(input){
+        if(typeof input === 'string') {
+            return JSON.parse(input, function(key, value){
+                if(Array.isArray(this) || key === ''){
+                    return new AstNode(value.type, null, value.children)
+                }else{
+                    switch (key) {
+                        case 'type':
+                            if(typeof value !== 'string') throw new TypeError('Field named "type" must be <String>')
+                            return value
+                        case 'children':
+                            if(!Array.isArray(value)) throw new TypeError('Field named "children" must be <Array>')
+                            return value
+                        default:
+                            return undefined
+                    }
+                }
+            })
+        }else{
+            throw new TypeError('Can only parse JSON string')
+        }
     }
     addChild(child){
         if(child instanceof AstNode){
