@@ -1,7 +1,7 @@
 import AstNode from './AstNode'
 
 var tokenizer = /(;;[^\n]*)|("[^"]*")|(\()|(\))|([^\s\(\)]+)/g;
-var commentRex = /^;;/g
+var commentRex = /^;;/
 
 var tokens
 

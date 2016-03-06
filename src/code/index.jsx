@@ -28,7 +28,7 @@ var RootComponent = React.createClass({
             window.localStorage.setItem('ast', json)
             console.log ('Saving to localStorage: ', json )
         } , 5000)*/
-        AJAX('https://raw.githubusercontent.com/WebAssembly/spec/master/ml-proto/test/switch.wast', (response) => {
+        AJAX('https://raw.githubusercontent.com/WebAssembly/spec/master/ml-proto/test/store_retval.wast', (response) => {
             var newRoot = astParser(response)
             newRoot.setFrozen(true)
             this.setState({root: newRoot})
