@@ -4,7 +4,7 @@ import AstNodeComponent from './AstNodeComponent'
 
 function generic(childCallback){
         var textWidth = measureText(this.state.editable, this.props.node.children.length)
-        var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 4, 10) + 'px'}}
+        var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 2, 10) + 'px'}}
                 onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
         
         var children
