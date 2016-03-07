@@ -20,7 +20,8 @@ function astParser(str){
 }
 
 function parseNode(parent){
-    var type = tokens.next() // TODO: check that not paren!
+    var type = tokens.next()
+    if(type === '(') throw new SyntaxError('AST parse error: node must have name')
     
     var current = new AstNode(type, parent)
     var incoming

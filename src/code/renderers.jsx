@@ -7,7 +7,7 @@ var varName = /^\$/g
 function generic(childCallback, selfNewline){
         var textWidth = measureText(this.state.editable, this.props.node.children.length)
         var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 2, 10) + 'px'}}
-                onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen}/>
+                onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen} onPaste={this.handlePaste}/>
         
         var children
         if(childCallback){

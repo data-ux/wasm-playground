@@ -1,6 +1,7 @@
 import React from 'react'
 import focus from './focus'
 import renderers from './renderers'
+import astParser from './astParser'
 
  var AstNodeComponent = React.createClass({
     getInitialState(){
@@ -72,6 +73,20 @@ import renderers from './renderers'
         var node = this.props.node;
         node.changeType(this.state.editable)
         this.forceUpdate()
+    },
+    handlePaste(e){
+        e.preventDefault()
+        var pasteText = e.clipboardData.getData("text")
+        var parsed
+        try{
+            parsed = astParser(pasteText)
+        }catch(ex){
+            console.log(ex)
+        }
+        if(parsed){
+            this.props.node.parent.replaceChild(this.props.node, parsed)
+            this.props.notifyUp(1)
+        }
     },
     componentDidMount(){
         this.refs.typeName && this.refs.typeName.focus()

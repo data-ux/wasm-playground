@@ -77,6 +77,14 @@ export default class AstNode {
             this.children.splice(index, 1)
         }
     }
+    replaceChild(old, replacing){
+        if(!(replacing instanceof AstNode)) throw new TypeError('Replacing child must be <AstNode>')
+        var index = this.children.indexOf(old)
+        if(index >= 0){
+            replacing.parent = this
+            this.children.splice(index, 1, replacing)
+        }
+    }
     changeType(type){
         if(typeof type !== 'string'){
             throw new TypeError('Node type must be <String>')
