@@ -1,3 +1,63 @@
+/* main layout */
+
+html, body, .main-wrapper, #react-target{
+    margin: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+.main-wrapper{
+    display: flex;
+    flex-flow: column;
+}
+
+div.header-bar{
+    height: 30px;
+    background-color: #2196f3;
+    box-shadow: 0 0 6px rgba(0,0,0, 0.3);
+    flex: none;
+    padding: 0 0 0 10px;
+    overflow: hidden;
+}
+div.header-bar h1{
+    margin: 0;
+    display: inline-block;
+    height: 30px;
+    line-height: 27px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    color: #fff;
+}
+div.header-bar h2{
+    margin: 0 0 0 20px;
+    display: inline-block;
+    height: 30px;
+    line-height: 27px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: rgba(255,255,255, 0.8);
+}
+
+div.editor-view{
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;
+    flex: auto;
+}
+
+div.wasmjs-console{
+    height: 30%;
+    background-color: #eee;
+    box-shadow: 0 0 6px rgba(0,0,0, 0.3);
+    flex: none;
+    min-height: 150px;
+}
+
+
+/* AST node styles */
 span.ast-node, span.ast-node input{
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
