@@ -75,6 +75,7 @@ wasmjsTag.onload = function() {
             module['reallocBuffer'] = function(size) {
                 var old = module['buffer'];
                 module['asmExports']['__growWasmMemory'](size); // tiny wasm method that just does grow_memory
+                console.log('grow_memory: ', size)
                 return module['buffer'] !== old ? module['buffer'] : null; // if it was reallocated, it changed
             }
             var asm2wasmImports = { // special asm2wasm imports
@@ -86,7 +87,7 @@ wasmjsTag.onload = function() {
                 },
                 "debugger": function() {
                     debugger;
-                },
+                }
             }
             module['info'] = {
                 global: null,
@@ -109,8 +110,8 @@ wasmjsTag.onload = function() {
     window.compile = function() {
         var str = astPrinter(rootNode)
         console.log(str)
-        return window.loadWasm(str);
+        return window.test(str);
     }
 }
 
-wasmjsTag.src = '/vendor/wasm.js'
+wasmjsTag.src = '/vendor/wasm_example.js'
