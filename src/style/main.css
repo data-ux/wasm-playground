@@ -46,6 +46,7 @@ div.editor-view{
     overflow-y: auto;
     padding: 10px;
     flex: auto;
+    padding-bottom: 50px;
 }
 
 div.wasmjs-console{
@@ -54,6 +55,57 @@ div.wasmjs-console{
     box-shadow: 0 0 6px rgba(0,0,0, 0.3);
     flex: none;
     min-height: 150px;
+    padding: 0 10px;
+    display: flex;
+    flex-flow: column;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+div.wasmjs-console .alert-area{
+    height: 21px;
+    line-height: 20px;
+    flex: none;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    margin: 0 -10px;
+    padding: 0 10px;
+}
+div.wasmjs-console .console-output{
+    flex: auto;
+    overflow: hidden;
+    position: relative;
+}
+div.wasmjs-console .output-inner{
+    position: absolute;
+    bottom: 0;
+    padding: 0 0 5px 14px;
+}
+div.wasmjs-console .console-input{
+    height: 25px;
+    flex: none;
+    padding: 2px 0;
+    position: relative;
+}
+div.wasmjs-console .console-input:before{
+    content: "›";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    font-size: 16px;
+}
+div.wasmjs-console .console-input-element{
+    display: inline-block;
+    height: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 13px;
+    border: 0;
+}
+div.wasmjs-console .console-input-element:focus{
+    outline: none;
 }
 
 

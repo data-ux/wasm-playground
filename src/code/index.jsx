@@ -21,8 +21,44 @@ if (stored) {
 }
 rootNode.setFrozen(true)
 
+var exports = {}
+setInterval(() => {
+            exports = window.compile()
+            console.log ('compiling...')
+        }, 5000)
 
-ReactDOM.render(<div className="main-wrapper"><HeaderBar /><EditorView root={rootNode} /><WasmJsConsole /></div>, document.getElementById('react-target'))
+
+//App component
+var App = React.createClass({
+    getInitialState(){
+        return {
+            alert: "Compiler ready",
+            color: "#008800",
+            exports: {},
+            output: {count : 0, msg: ""}
+        }
+    },
+    handleConsoleCommand(command){
+        var func = exports[command]
+        if(!func){
+            this.setState({output: {count : this.state.output.count + 1, msg: "Unknown export"}})
+            return
+        }
+        var result = func(1, 5.9)
+        this.setState({output: {count : this.state.output.count + 1, msg: result}})
+    },
+    render(){
+        return (
+            <div className="main-wrapper">
+                <HeaderBar />
+                <EditorView root={rootNode} />
+                <WasmJsConsole onCommand={this.handleConsoleCommand} output={this.state.output} alertText={this.state.alert} alertColor={this.state.color} />
+            </div>
+            )
+    }
+})
+
+ReactDOM.render(<App />, document.getElementById('react-target'))
 
 
 
@@ -76,7 +112,7 @@ wasmjsTag.onload = function() {
             module['_instantiate'](temp)
         } catch (e) {
             console.log(e)
-            return {}
+            return null
         }
 
         return module['asmExports']
@@ -84,7 +120,14 @@ wasmjsTag.onload = function() {
     window.compile = function() {
         var str = astPrinter(rootNode)
         console.log(str)
-        return window.test(str);
+        var exports
+        try {
+            exports = window.test(str)
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+        return exports;
     }
 }
 
