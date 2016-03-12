@@ -91,10 +91,8 @@ export default class AstNode {
         }
         this.type = type
     }
-    branchOut(){
-        if(!this.children.length){
-            this.children.push( new AstNode('', this) )
-        }
+    addSiblingAsFirst(){
+            this.children.unshift( new AstNode('', this) )
     }
     addSiblingAfter(child){
         var index = this.children.indexOf(child)
@@ -111,6 +109,14 @@ export default class AstNode {
     isLastChild(child){
         var index = this.children.indexOf(child)
         if(index === this.children.length - 1){
+            return true
+        }else{
+            return false
+        }
+    }
+    isFirstChild(child){
+        var index = this.children.indexOf(child)
+        if(index === 0){
             return true
         }else{
             return false

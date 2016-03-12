@@ -20,7 +20,7 @@ import astParser from './astParser'
                     break
                 }
                 node.changeType(this.state.editable)
-                node.branchOut()
+                node.addSiblingAsFirst()
                 this.props.notifyUp()
                 break
             case 'Tab':
@@ -33,17 +33,22 @@ import astParser from './astParser'
                 this.props.notifyUp()
                 break
             case 'Backspace':
-                if(this.state.editable.length === 0){
+                if(this.state.editable.length === 0){debugger
                     e.preventDefault()
                     this.remove()
                     focus.previousOfType(this.refs.typeName)
                 }
                 break
             case 'ArrowLeft':
-                    if(target.selectionStart === 0 && target.selectionEnd === 0){
-                        e.preventDefault()
-                        focus.previousOfType(target)
+                if(target.selectionStart === 0 && target.selectionEnd === 0){
+                    e.preventDefault()
+                    if(node.parent.frozen && node.parent.isFirstChild(node)){
+                        node.parent.addSiblingAsFirst()
+                        this.props.notifyUp()
+                        return
                     }
+                    focus.previousOfType(target)
+                }
                 break
             case 'ArrowRight':
                     if(target.selectionStart === this.state.editable.length && target.selectionEnd === this.state.editable.length){
