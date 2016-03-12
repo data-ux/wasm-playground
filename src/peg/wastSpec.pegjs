@@ -35,12 +35,20 @@ AliasRow=
 	
 RuleForm=
 	"("__ name:RuleName __ list:(__ (RuleRef / RuleForm))* __ ")" mod:OptionalModifier?{
-    	return {type:"form", name:name.join(""), children: extractList(list, 1), repeat: mod }
+    	var ob = {type:"form", name:name.join(""), children: extractList(list, 1)}
+        if(mod){
+        	ob.repeat = mod
+        }
+    	return ob
     }
 
 RuleRef=
 	"<" name:RuleName ">" mod:OptionalModifier?{
-    	return {type:"ruleRef", name: name.join(""), repeat: mod}
+    	var ob = {type:"ruleRef", name: name.join("")}
+        if(mod){
+        	ob.repeat = mod
+        }
+    	return ob
     }
 
 OptionalModifier=
