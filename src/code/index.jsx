@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import functionParser from '../PEG/functionParser.pegjs'
+
 import HeaderBar from './HeaderBar'
 import EditorView from './EditorView'
 import WasmJsConsole from './WasmJsConsole'
@@ -39,12 +41,22 @@ var App = React.createClass({
         }
     },
     handleConsoleCommand(command){
-        var func = exports[command]
-        if(!func){
-            this.setState({output: {count : this.state.output.count + 1, msg: "Unknown export"}})
+        var parsed
+        
+        try{
+            parsed = functionParser.parse(command)
+        }catch(e){
+            this.setState({output: {count : this.state.output.count + 1, msg: e.toString()}})
             return
         }
-        var result = func(1, 5.9)
+        console.log(parsed)
+        
+        var func = exports[parsed.functionName]
+        if(!func){
+            this.setState({output: {count : this.state.output.count + 1, msg: "Unknown export function"}})
+            return
+        }
+        var result = func.apply(null, parsed.args)
         this.setState({output: {count : this.state.output.count + 1, msg: result}})
     },
     render(){
