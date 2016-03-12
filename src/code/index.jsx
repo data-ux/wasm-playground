@@ -12,6 +12,8 @@ import AstNode from './AstNode'
 import astParser from './astParser'
 import astPrinter from './astPrinter'
 
+import astValidator from './astValidator'
+
 var stored = window.localStorage.getItem('ast')
 var rootNode
 

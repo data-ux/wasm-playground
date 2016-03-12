@@ -1,12 +1,23 @@
-ntype: ( i32 ) | ( i64 ) | ( f32 ) | ( f64 )
+int: ( int )
+$str: ( $str )
+string: ( string )
+i32: ( i32 )
+i64: ( i64 )
+f32: ( f32 )
+f64: ( f64 )
+name: ( name )
+
+var: <int> | <$str>
+
+ntype: <i32> | <i64> | <f32> | <f64>
 
 expr: <nop> | <block> | <loop> | <select> | <if> | <br> | <br_if> | <br_table> | <return> | <call> | <call_import> | <call_indirect> | <get_local> | <set_local> | <unreachable> | <memory_size> | <grow_memory>
 
 nop:  ( nop )
 block:  ( block <name>? <expr>* )
-loop:  ( loop <name1>? <name2>? <expr>* )
+loop:  ( loop <name>? <name>? <expr>* )
 select:  ( select <expr> <expr> <expr> )
-if:  ( if <expr> ( then <name>? <expr>* ) ( else <name>? <expr>* )? ) | ( if <expr1> <expr2> <expr3>? )
+if:  ( if <expr> ( then <name>? <expr>* ) ( else <name>? <expr>* )? ) | ( if <expr> <expr> <expr>? )
 br:  ( br <var> <expr>? )
 br_if:  ( br_if <var> <expr>? <expr> )
 br_table:  ( br_table <var> <var> <expr>? <expr> )
