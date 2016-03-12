@@ -24,39 +24,59 @@ if (stored) {
 rootNode.setFrozen(true)
 
 var exports = {}
-setInterval(() => {
-            exports = window.compile()
-            console.log ('compiling...')
-        }, 5000)
+
 
 
 //App component
 var App = React.createClass({
     getInitialState(){
         return {
-            alert: "Compiler ready",
+            alert: "",
             color: "#008800",
             exports: {},
             output: {count : 0, msg: ""}
         }
     },
+    componentDidMount() {
+        setInterval(() => {
+            this.doCompile()
+        }, 5000)
+    },
+    doCompile(){
+        console.log ('compiling...')
+        exports = window.compile()
+        if(exports === null){
+            this.setState({alert: "Syntax error. Failed to compile module.", color: "#880000"})
+        }else{
+            this.setState({alert: "Module valid. Exports available", color: "#008800"})
+        }
+    },
     handleConsoleCommand(command){
         var parsed
-        
+        if(exports === null){
+            this.setState({output: {count : this.state.output.count + 1, msg: "Error: No valid module"}})
+            return
+        }
         try{
             parsed = functionParser.parse(command)
         }catch(e){
             this.setState({output: {count : this.state.output.count + 1, msg: e.toString()}})
             return
         }
-        console.log(parsed)
         
         var func = exports[parsed.functionName]
         if(!func){
-            this.setState({output: {count : this.state.output.count + 1, msg: "Unknown export function"}})
+            this.setState({output: {count : this.state.output.count + 1, msg: "Error: Unknown export function"}})
             return
         }
-        var result = func.apply(null, parsed.args)
+        
+        var result
+        try{
+            result = func.apply(null, parsed.args)
+        }catch(e){
+            this.setState({output: {count : this.state.output.count + 1, msg: "Error: Called function threw exception"}})
+            return
+        }
         this.setState({output: {count : this.state.output.count + 1, msg: result}})
     },
     render(){
