@@ -79,10 +79,10 @@ var App = React.createClass({
     componentDidMount() {
         setInterval(() => {
             this.doCompile()
-        }, 5000)
+        }, 3000)
     },
     doCompile(){
-        console.log ('compiling...')
+        //console.log ('compiling...')
         exports = window.compile()
         if(exports === null){
             this.setState({alert: "Syntax error. Failed to compile module.", color: "#880000"})
@@ -191,7 +191,7 @@ wasmjsTag.onload = function() {
     }
     window.compile = function() {
         var str = astPrinter(rootNode)
-        console.log(str)
+        //console.log(str)
         var exports
         try {
             exports = window.test(str)
