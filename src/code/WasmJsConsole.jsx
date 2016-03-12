@@ -3,12 +3,15 @@ import React from 'react'
 
 var WasmJsConsole = React.createClass({
     getInitialState(){
-        return {outputList: []}
+        return {outputList: [], count: 0}
     },
     componentWillReceiveProps(nextProps){
-      if(nextProps.output.count > this.state.outputList.length){
+      if(nextProps.output.count > this.state.count){
           this.state.outputList.push(nextProps.output.msg)
-          this.setState({outputList: this.state.outputList})
+          if(this.state.outputList.length > 20){
+              this.state.outputList.shift();
+          }
+          this.setState({outputList: this.state.outputList, count: this.state.count + 1})
       }  
     },
     cancelClick(){
@@ -26,7 +29,6 @@ var WasmJsConsole = React.createClass({
         var target = e.target
         if(e.key === 'Enter'){
             e.preventDefault()
-            //TODO validate
             this.props.onCommand(this.refs.input.value)
             this.refs.input.value = ""
         }
