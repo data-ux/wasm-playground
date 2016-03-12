@@ -25,7 +25,46 @@ rootNode.setFrozen(true)
 
 var exports = {}
 
+function analyzeExports(root, exports){
+    var exportNames = root.children
+        .filter( (c) => c.type === "export")
+        .map(function(child){
+            return {name: child.children[0].type.replace(/["]+/g, ''), funcName: child.children[1].type}
+    })
 
+    var funcs = root.children
+        .filter( (c) => c.type === "func")
+        .map(function(child){
+            return {name: child.children[0].type, func: child}
+    })
+    
+    var validExports = Object.keys(exports).map(function(name){
+        return exportNames.find(function(ex){
+            return ex.name === name
+        })
+    })
+
+    var validFuncs = validExports.map(function(ex){
+        var targetFunc = funcs.find(function(func){
+            return func.name === ex.funcName
+        })
+        if(targetFunc){
+            targetFunc.exportName = ex.name
+        }
+        return targetFunc
+        
+    }).filter( (o) => o )
+
+    return validFuncs.map(function(e){
+        var params = e.func.children.filter(function(child){
+            return child.type === "param" && child.children.length > 0
+        }).map(function(child){
+            return child.children[child.children.length-1].type
+        })
+        return e.exportName + "(" + params.join(", ") + ")"
+    }).join(", ")
+     
+}
 
 //App component
 var App = React.createClass({
@@ -48,7 +87,7 @@ var App = React.createClass({
         if(exports === null){
             this.setState({alert: "Syntax error. Failed to compile module.", color: "#880000"})
         }else{
-            this.setState({alert: "Module valid. Exports available", color: "#008800"})
+            this.setState({alert: "Module valid. Available exports: " + analyzeExports(rootNode, exports), color: "#008800"})
         }
     },
     handleConsoleCommand(command){
@@ -66,7 +105,7 @@ var App = React.createClass({
         
         var func = exports[parsed.functionName]
         if(!func){
-            this.setState({output: {count : this.state.output.count + 1, msg: "Error: Unknown export function"}})
+            this.setState({output: {count : this.state.output.count + 1, msg: "Error: Unknown export function. Available exports: " + analyzeExports(rootNode, exports)}})
             return
         }
         
@@ -75,6 +114,7 @@ var App = React.createClass({
             result = func.apply(null, parsed.args)
         }catch(e){
             this.setState({output: {count : this.state.output.count + 1, msg: "Error: Called function threw exception"}})
+            console.log(e)
             return
         }
         this.setState({output: {count : this.state.output.count + 1, msg: result}})
