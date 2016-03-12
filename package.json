@@ -4,9 +4,8 @@
   "description": "Web Assembly AST editor",
   "main": "index.js",
   "scripts": {
-    "start": "npm run serve | npm run dev",
-    "serve": "./node_modules/.bin/http-server -p 8080",
-    "dev": "webpack-dev-server --progress --colors --port 8090"
+    "build": "node src/build/generateRules.js",
+    "dev": "npm run build && webpack-dev-server --progress --colors --port 8090"
   },
   "author": "Jan Wolski",
   "license": "all rights reserved",

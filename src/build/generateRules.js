@@ -18,7 +18,8 @@ function handlePEG(err, pegSrc) {
 
         var asrtRules = parser.parse(rulesTxt);
         
-        fs.writeFile('src/generated/astRules.js', "module.exports = \n" + JSON.stringify(asrtRules, null, '\t'));
+        fs.writeFileSync('src/generated/astRules.js', "module.exports = \n" + JSON.stringify(asrtRules, null, '\t'));
+        process.exit();
     });
 
 }
