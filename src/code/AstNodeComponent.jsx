@@ -3,6 +3,8 @@ import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
 
+import {astOptions} from './astValidator'
+
  var AstNodeComponent = React.createClass({
     getInitialState(){
         return {editable: this.props.node.type}
@@ -13,6 +15,7 @@ import astParser from './astParser'
     handleKeyDown: function(e){
         var node = this.props.node;
         var target = e.target
+        astOptions(node)
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
@@ -33,7 +36,7 @@ import astParser from './astParser'
                 this.props.notifyUp()
                 break
             case 'Backspace':
-                if(this.state.editable.length === 0){debugger
+                if(this.state.editable.length === 0){
                     e.preventDefault()
                     this.remove()
                     focus.previousOfType(this.refs.typeName)
