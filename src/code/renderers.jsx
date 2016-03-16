@@ -27,9 +27,13 @@ function generic(childCallback, selfNewline){
         if(this.props.newline || selfNewline){
              classes.push('newline')
         }
-        var auto;
+        var auto
+        var tentatives
         if(this.state.focused){
-            auto = <AutoComplete options={this.state.options} current={this.state.editable} tentative={this.state.tentative} />
+            tentatives = this.state.options.filter( (option) => {
+                return option.substr(0, this.state.editable.length) === this.state.editable
+            })
+            auto = <AutoComplete options={tentatives} tentative={this.state.tentative} />
         }
         
         return <span className={classes.join(' ')}>{typeName}{auto}{children}</span>

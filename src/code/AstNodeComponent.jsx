@@ -28,7 +28,14 @@ import astParser from './astParser'
             }
         }
         if(astValidateTypePartial(this.state.options, e.target.value) || e.target.value.trim().length === 0){
-            this.setState({editable: e.target.value})
+            var tentatives = this.state.options.filter( (option) => {
+                return option.substr(0, e.target.value.length) === e.target.value
+            })
+            var tentative = this.state.tentative
+            if(tentatives.indexOf(tentative) < 0){
+                tentative = tentatives[0]
+            }
+            this.setState({editable: e.target.value, tentative: tentative})
         }else{
             var delta = e.target.value.length - this.state.editable.length
             var selStart = e.target.selectionStart - delta
@@ -92,6 +99,34 @@ import astParser from './astParser'
                         focus.nextOfType(target)
                     }
                 break
+            case 'ArrowDown':
+                var tentatives = this.state.options.filter( (option) => {
+                    return option.substr(0, this.state.editable) === this.state.editable
+                })
+                var tentative = this.state.tentative
+                var index = tentatives.indexOf(tentative)
+                if( index < 0){
+                    tentative = tentatives[0]
+                }
+                if(index < tentatives.length -1){
+                    tentative = tentatives[index + 1]
+                }
+                this.setState({tentative: tentative})
+                break
+            case 'ArrowUp':
+                var tentatives = this.state.options.filter( (option) => {
+                    return option.substr(0, this.state.editable) === this.state.editable
+                })
+                var tentative = this.state.tentative
+                var index = tentatives.indexOf(tentative)
+                if( index < 0){
+                    tentative = tentatives[0]
+                }
+                if(index > 0){
+                    tentative = tentatives[index - 1]
+                }
+                this.setState({tentative: tentative})
+                break
         }
     },
     remove(){
@@ -120,7 +155,11 @@ import astParser from './astParser'
                 this.refs.typeName.setSelectionRange(this.state.editable.length-1, this.state.editable.length-1)
             }
         }
-        this.setState({options: astOptions(this.props.node), focused: true})
+        var options = astOptions(this.props.node)
+        var tentatives = options.filter( (option) => {
+                return option.substr(0, this.state.editable.length) === this.state.editable
+            })
+        this.setState({options: options, tentative: tentatives[0], focused: true})
     },
     handlePaste(e){
         e.preventDefault()
