@@ -1,6 +1,7 @@
 import React from 'react'
 import measureText from './measureText'
 import AstNodeComponent from './AstNodeComponent'
+import AutoComplete from './AutoComplete'
 
 var varName = /^\$/g
 
@@ -26,7 +27,12 @@ function generic(childCallback, selfNewline){
         if(this.props.newline || selfNewline){
              classes.push('newline')
         }
-        return <span className={classes.join(' ')}>{typeName}{children}</span>
+        var auto;
+        if(this.state.focused){
+            auto = <AutoComplete options={this.state.options} current={this.state.editable} tentative={this.state.tentative} />
+        }
+        
+        return <span className={classes.join(' ')}>{typeName}{auto}{children}</span>
 }
 function func(){
     return generic.bind(this)( () => {

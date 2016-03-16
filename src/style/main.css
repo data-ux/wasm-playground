@@ -151,3 +151,19 @@ span.ast-node.newline{
 span.ast-node.dummy{
     visibility: hidden;
 }
+div.auto-complete-holder{
+    position: relative;
+    width: 0;
+    height: 0;
+    display: inline-block;
+}
+div.auto-complete-list{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #eee;
+    border: #aaa solid 1px;
+}
+div.auto-complete-list div.active{
+    background-color: #666;
+}

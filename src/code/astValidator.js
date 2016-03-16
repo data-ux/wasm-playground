@@ -68,7 +68,8 @@ export function astOptions(node) {
         return []
     }
     if (rule.type === 'rule') {
-        return getOptionsForIndex(rule.options[0].children, parent.children, nodeIndex)
+        var options = getOptionsForIndex(rule.options[0].children, parent.children, nodeIndex)
+        return options.sort()
     }
     // TODO multiple forms
 }

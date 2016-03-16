@@ -1,9 +1,10 @@
 import React from 'react'
+
+import {astOptions, astValidateType, astValidateTypePartial} from './astValidator'
 import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
 
-import {astOptions, astValidateType, astValidateTypePartial} from './astValidator'
 
  var AstNodeComponent = React.createClass({
     getInitialState(){
@@ -105,9 +106,9 @@ import {astOptions, astValidateType, astValidateTypePartial} from './astValidato
         }
         if(astValidateType(this.state.options, this.state.editable)){
             this.props.node.changeType(this.state.editable)
-            this.forceUpdate()
+            this.setState({focused: false})
         }else{
-            this.setState({editable: this.props.node.type})
+            this.setState({editable: this.props.node.type, focused: false})
         }
     },
     handleFocus(){
@@ -119,7 +120,7 @@ import {astOptions, astValidateType, astValidateTypePartial} from './astValidato
                 this.refs.typeName.setSelectionRange(this.state.editable.length-1, this.state.editable.length-1)
             }
         }
-        this.setState({options: astOptions(this.props.node)})
+        this.setState({options: astOptions(this.props.node), focused: true})
     },
     handlePaste(e){
         e.preventDefault()
