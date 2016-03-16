@@ -37,11 +37,34 @@ function inflateRefs(rule) {
     }
 }
 
+export function astValidateType(options, candidate){
+    return options.some( (option) => {
+        var tester = atomRex[option]
+        if (!tester) {
+            return option === candidate
+        }
+        return tester.test(candidate)
+    })
+}
+
+export function astValidateTypePartial(options, candidate){
+    return options.some( (option) => {
+        var tester = atomRexPartial[option]
+        if (!tester) {
+            return option.substr(0, candidate.length) === candidate
+        }
+        return tester.test(candidate)
+    })
+}
+
 export function astOptions(node) {
     var parent = node.parent
     var nodeIndex = parent.children.indexOf(node)
     var rule = rootRulesMap[parent.type]
     if (!rule) {
+        return []
+    }
+    if(rule.options.length === 0){
         return []
     }
     if (rule.type === 'rule') {
@@ -77,10 +100,10 @@ function getOptionsForIndex(children, siblings, index) {
     var node = siblings[index]
     var theOptions = []
     while (currentChild < children.length) {
-        var optionsFromDef = GetOptionsFromDef(children[currentChild])
+        var optionsFromDef = getOptionsFromDef(children[currentChild])
         theOptions = theOptions.concat(optionsFromDef)
         if(!children[currentChild].repeat){
-            // must be this type. end of line
+            // must be this type.  stop here
             break
         }
         currentChild++
@@ -89,7 +112,7 @@ function getOptionsForIndex(children, siblings, index) {
     return theOptions
 }
 
-function GetOptionsFromDef(ruleDef){
+function getOptionsFromDef(ruleDef){
     if (ruleDef.type === 'ruleRef') {
         if (ruleDef.ref.type === 'rule') {
             return ruleDef.ref.name
@@ -120,30 +143,23 @@ function matchesDef(ruleDef, node) {
         return formTest(ruleDef)
     }
     function formTest(form) {
-        if (form.children.length > 0) {
+        var tester = atomRex[form.name]
+        if (!tester) {
             return form.name == node.type
-        } else {
-            var tester = atomRex[form.name]
-            if (!tester) console.log('No tester for ', form.name)
-            return tester.test(node.type)
         }
+        return tester.test(node.type)
     }
 }
 
-
-
 var atomRex = {
-    int: /^[0-9]$/,
+    int: /^[0-9]+$/,
     $str: /^\$[a-zA-Z0-9]+$/,
     string: /^".+"$/,
-    i32: /^i32$/,
-    i64: /^i64$/,
-    f32: /^f32$/,
-    f64: /^f64$/,
-    name: /^[a-zA-Z0-9\$-_]+$/,
-
-    nop: /^nop$/,
-    unreachable: /^unreachable$/,
-    memory_size: /^memory_size$/,
-    grow_memory: /^grow_memory$/
+    name: /^[a-zA-Z0-9\$-_]+$/
+}
+var atomRexPartial = {
+    int: /^[0-9]*$/,
+    $str: /^\$[a-zA-Z0-9]*$/,
+    string: /^".*"$/,
+    name: /^[a-zA-Z0-9\$-_]*$/
 }

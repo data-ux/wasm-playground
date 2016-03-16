@@ -38,7 +38,7 @@ param:  ( param <ntype>* ) | ( param <name> <ntype> )
 result: ( result <ntype> )
 local:  ( local <ntype>* ) | ( local <name> <ntype> )
 
-module:  ( module <type>* <func>* <import>* <export>* <table>* <memory>? <start>? )
+module:  ( module <memory>? <import>* <type>* <func>* <export>* <table>* <start>? )
 type:    ( type <name>? ( func <param>* <result>? ) )
 import:  ( import <name>? <string> <string> (param <ntype>* ) (result <ntype>)* )
 export:  ( export <string> <var> ) | ( export <string> <memory>)

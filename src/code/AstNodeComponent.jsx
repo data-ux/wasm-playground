@@ -3,23 +3,47 @@ import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
 
-import {astOptions} from './astValidator'
+import {astOptions, astValidateType, astValidateTypePartial} from './astValidator'
 
  var AstNodeComponent = React.createClass({
     getInitialState(){
-        return {editable: this.props.node.type}
+        return {
+            editable: this.props.node.type,
+            options: []
+        }
     },
     handleChange(e){
-        this.setState({editable: e.target.value})
+        var input = e.target
+        if(astValidateTypePartial(this.state.options, '""')){
+            if(e.target.value === '"'){
+                if(this.state.editable === '""'){
+                    this.setState({editable: ''})
+                }else{
+                    this.setState({editable: '""'}, function(){
+                        input.setSelectionRange(1, 1)
+                    })
+                }
+                return
+            }
+        }
+        if(astValidateTypePartial(this.state.options, e.target.value) || e.target.value.trim().length === 0){
+            this.setState({editable: e.target.value})
+        }else{
+            var delta = e.target.value.length - this.state.editable.length
+            var selStart = e.target.selectionStart - delta
+            var selEnd = e.target.selectionEnd - delta
+            this.setState({editable: this.state.editable}, function(){
+                input.setSelectionRange(selStart, selEnd)
+            })
+        }
     },
     handleKeyDown: function(e){
         var node = this.props.node;
         var target = e.target
-        astOptions(node)
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
-                if(this.state.editable.trim().length === 0){
+                if(this.state.editable.trim().length === 0 || !astValidateType(this.state.options, this.state.editable)){
                     break
                 }
                 node.changeType(this.state.editable)
@@ -28,7 +52,7 @@ import {astOptions} from './astValidator'
                 break
             case 'Tab':
                 e.preventDefault()
-                if(this.state.editable.trim().length === 0){
+                if(this.state.editable.trim().length === 0 || !astValidateType(this.state.options, this.state.editable)){
                     break
                 }
                 node.changeType(this.state.editable)
@@ -77,10 +101,25 @@ import {astOptions} from './astValidator'
     handleBlur(){
         if(this.state.editable.trim().length === 0){
             this.remove()
+            return
         }
-        var node = this.props.node;
-        node.changeType(this.state.editable)
-        this.forceUpdate()
+        if(astValidateType(this.state.options, this.state.editable)){
+            this.props.node.changeType(this.state.editable)
+            this.forceUpdate()
+        }else{
+            this.setState({editable: this.props.node.type})
+        }
+    },
+    handleFocus(){
+        if(this.state.editable.substr(0, 1) === '"'){
+            if(this.refs.typeName.selectionStart === 0){
+                this.refs.typeName.setSelectionRange(1, 1)
+            }
+            if(this.refs.typeName.selectionStart === this.state.editable.length){
+                this.refs.typeName.setSelectionRange(this.state.editable.length-1, this.state.editable.length-1)
+            }
+        }
+        this.setState({options: astOptions(this.props.node)})
     },
     handlePaste(e){
         e.preventDefault()
