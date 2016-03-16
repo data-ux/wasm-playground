@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {astOptions, astValidateType, astValidateTypePartial} from './astValidator'
+import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial} from './astValidator'
 import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
@@ -28,9 +28,7 @@ import astParser from './astParser'
             }
         }
         if(astValidateTypePartial(this.state.options, e.target.value) || e.target.value.trim().length === 0){
-            var tentatives = this.state.options.filter( (option) => {
-                return option.substr(0, e.target.value.length) === e.target.value
-            })
+            var tentatives = astFilterOptionsPartial(this.state.options, e.target.value)
             var tentative = this.state.tentative
             if(tentatives.indexOf(tentative) < 0){
                 tentative = tentatives[0]
@@ -100,9 +98,7 @@ import astParser from './astParser'
                     }
                 break
             case 'ArrowDown':
-                var tentatives = this.state.options.filter( (option) => {
-                    return option.substr(0, this.state.editable) === this.state.editable
-                })
+                var tentatives = astFilterOptionsPartial(this.state.options, this.state.editable)
                 var tentative = this.state.tentative
                 var index = tentatives.indexOf(tentative)
                 if( index < 0){
@@ -114,9 +110,7 @@ import astParser from './astParser'
                 this.setState({tentative: tentative})
                 break
             case 'ArrowUp':
-                var tentatives = this.state.options.filter( (option) => {
-                    return option.substr(0, this.state.editable) === this.state.editable
-                })
+                var tentatives = astFilterOptionsPartial(this.state.options, this.state.editable)
                 var tentative = this.state.tentative
                 var index = tentatives.indexOf(tentative)
                 if( index < 0){
@@ -156,9 +150,7 @@ import astParser from './astParser'
             }
         }
         var options = astOptions(this.props.node)
-        var tentatives = options.filter( (option) => {
-                return option.substr(0, this.state.editable.length) === this.state.editable
-            })
+        var tentatives = astFilterOptionsPartial(options, this.state.editable)
         this.setState({options: options, tentative: tentatives[0], focused: true})
     },
     handlePaste(e){

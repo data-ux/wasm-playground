@@ -57,6 +57,16 @@ export function astValidateTypePartial(options, candidate){
     })
 }
 
+export function astFilterOptionsPartial(options, candidate){
+    return options.filter( (option) => {
+        var tester = atomRexPartial[option]
+        if (!tester) {
+            return option.substr(0, candidate.length) === candidate
+        }
+        return tester.test(candidate)
+    })
+}
+
 export function astOptions(node) {
     var parent = node.parent
     var nodeIndex = parent.children.indexOf(node)

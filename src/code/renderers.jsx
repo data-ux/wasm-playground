@@ -2,6 +2,7 @@ import React from 'react'
 import measureText from './measureText'
 import AstNodeComponent from './AstNodeComponent'
 import AutoComplete from './AutoComplete'
+import {astFilterOptionsPartial} from './astValidator'
 
 var varName = /^\$/g
 
@@ -30,9 +31,7 @@ function generic(childCallback, selfNewline){
         var auto
         var tentatives
         if(this.state.focused){
-            tentatives = this.state.options.filter( (option) => {
-                return option.substr(0, this.state.editable.length) === this.state.editable
-            })
+            tentatives = astFilterOptionsPartial(this.state.options, this.state.editable)
             auto = <AutoComplete options={tentatives} tentative={this.state.tentative} />
         }
         
