@@ -15,27 +15,29 @@ import astParser from './astParser'
     },
     handleChange(e){
         var input = e.target
+        var newValue = e.target.value
+        var callback
         if(astValidateTypePartial(this.state.options, '""')){
-            if(e.target.value === '"'){
+            if(newValue === '"'){
                 if(this.state.editable === '""'){
-                    this.setState({editable: ''})
+                    newValue = ''
                 }else{
-                    this.setState({editable: '""'}, function(){
+                    newValue = '""'
+                    callback = function(){
                         input.setSelectionRange(1, 1)
-                    })
+                    }
                 }
-                return
             }
         }
-        if(astValidateTypePartial(this.state.options, e.target.value) || e.target.value.trim().length === 0){
-            var tentatives = astFilterOptionsPartial(this.state.options, e.target.value)
+        if(astValidateTypePartial(this.state.options, newValue) || newValue.trim().length === 0){
+            var tentatives = astFilterOptionsPartial(this.state.options, newValue)
             var tentative = this.state.tentative
             if(tentatives.indexOf(tentative) < 0){
                 tentative = tentatives[0]
             }
-            this.setState({editable: e.target.value, tentative: tentative})
+            this.setState({editable: newValue, tentative: tentative}, callback)
         }else{
-            var delta = e.target.value.length - this.state.editable.length
+            var delta = newValue.length - this.state.editable.length
             var selStart = e.target.selectionStart - delta
             var selEnd = e.target.selectionEnd - delta
             this.setState({editable: this.state.editable}, function(){
@@ -52,16 +54,21 @@ import astParser from './astParser'
                 var newType = astGetCompletion(this.state.tentative)
                 node.changeType(newType)
                 this.setState({editable: newType})
-                node.addChildAsFirst()
+                var candidate = node.addChildAsFirst()
+                if(astOptions(candidate).length === 0){
+                    node.removeChild(candidate)
+                }
                 this.props.notifyUp(1)
                 break
             case 'Tab':
                 e.preventDefault()
-                if(this.state.editable.trim().length === 0 ){
-                    break
+                var newType = astGetCompletion(this.state.tentative)
+                node.changeType(newType)
+                this.setState({editable: newType})
+                var candidate = node.parent.addSiblingAfter(node)
+                if(astOptions(candidate).length === 0){
+                    node.parent.removeChild(candidate)
                 }
-                node.changeType(astGetCompletion(this.state.tentative))
-                node.parent.addSiblingAfter(node)
                 this.props.notifyUp(1)
                 break
             case 'Backspace':

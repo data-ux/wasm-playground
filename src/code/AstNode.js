@@ -92,12 +92,17 @@ export default class AstNode {
         this.type = type
     }
     addChildAsFirst(){
-            this.children.unshift( new AstNode('', this) )
+        var incoming = new AstNode('', this)
+        this.children.unshift(incoming)
+        return incoming
     }
     addSiblingAfter(child){
         var index = this.children.indexOf(child)
+        var incoming
         if(index >= 0){
-            this.children.splice(index + 1, 0 , new AstNode('', this))
+            incoming = new AstNode('', this)
+            this.children.splice(index + 1, 0 , incoming)
+            return incoming
         }
     }
     setFrozen(bool){
