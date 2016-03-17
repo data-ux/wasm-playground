@@ -48,12 +48,16 @@ import astParser from './astParser'
     handleKeyDown: function(e){
         var node = this.props.node;
         var target = e.target
+        var callback
+        var newType = astGetCompletion(this.state.tentative, this.state.editable)
+        if(newType === '""'){
+            callback = function(){target.setSelectionRange(1, 1)}
+        }
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
-                var newType = astGetCompletion(this.state.tentative)
                 node.changeType(newType)
-                this.setState({editable: newType})
+                this.setState({editable: newType}, callback)
                 var candidate = node.addChildAsFirst()
                 if(astOptions(candidate).length === 0){
                     node.removeChild(candidate)
@@ -62,9 +66,8 @@ import astParser from './astParser'
                 break
             case 'Tab':
                 e.preventDefault()
-                var newType = astGetCompletion(this.state.tentative)
                 node.changeType(newType)
-                this.setState({editable: newType})
+                this.setState({editable: newType}, callback)
                 var candidate = node.parent.addSiblingAfter(node)
                 if(astOptions(candidate).length === 0){
                     node.parent.removeChild(candidate)
@@ -82,7 +85,7 @@ import astParser from './astParser'
                 if(target.selectionStart === 0 && target.selectionEnd === 0){
                     e.preventDefault()
                     if(node.parent.frozen && node.parent.isFirstChild(node)){
-                        node.parent.addSiblingAsFirst()
+                        node.parent.addChildAsFirst()
                         this.props.notifyUp(1)
                         return
                     }

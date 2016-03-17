@@ -58,6 +58,9 @@ export function astValidateTypePartial(options, candidate){
 }
 
 export function astFilterOptionsPartial(options, candidate){
+    if(candidate === ''){
+        return options
+    }
     return options.filter( (option) => {
         var tester = atomRexPartial[option]
         if (!tester) {
@@ -67,10 +70,13 @@ export function astFilterOptionsPartial(options, candidate){
     })
 }
 
-export function astGetCompletion(option){
+export function astGetCompletion(option, currentValue){
     var completion = completions[option]
-    if(!completion){
+    if(typeof completion === 'undefined'){
         return option
+    }
+    if(currentValue !== '' && astValidateTypePartial([option], currentValue)){
+        return currentValue
     }
     return completion
 }
@@ -92,40 +98,40 @@ export function astOptions(node) {
     // TODO multiple forms
 }
 
-function getOptionsForIndex(children, siblings, index) {
-    // let's see how sibligns "eat up" the children
-    var currentChild = 0
+function getOptionsForIndex(ruleDefs, siblings, index) {
+    // let's see how sibligns "eat up" the ruleDefs
+    var currentDef = 0
     var i = 0;
     console.log('eating starts  ---------------------')
     while (i < index) {
         var sibling = siblings[i];
-        if (matchesDef(children[currentChild], sibling)) {
+        if (matchesDef(ruleDefs[currentDef], sibling)) {
             i++
-            if (children[currentChild].repeat !== '*') {
-                console.log('child eaten: ', children[currentChild].name, ' by ', sibling.type)
-                currentChild++
+            if (ruleDefs[currentDef].repeat !== '*') {
+                console.log('child eaten: ', ruleDefs[currentDef].name, ' by ', sibling.type)
+                currentDef++
             }
         } else {
-            console.log('child eaten: ', children[currentChild].name, ' by ', sibling.type)
-            currentChild++
+            console.log('child eaten: ', ruleDefs[currentDef].name, ' by ', sibling.type)
+            currentDef++
         }
 
 
-        if (currentChild >= children.length) {
-            console.log('ran out of children!')
+        if (currentDef >= ruleDefs.length) {
+            console.log('ran out of ruleDefs!')
             return []
         }
     }
     var node = siblings[index]
     var theOptions = []
-    while (currentChild < children.length) {
-        var optionsFromDef = getOptionsFromDef(children[currentChild])
+    while (currentDef < ruleDefs.length) {
+        var optionsFromDef = getOptionsFromDef(ruleDefs[currentDef])
         theOptions = theOptions.concat(optionsFromDef)
-        if(!children[currentChild].repeat){
+        if(!ruleDefs[currentDef].repeat){
             // must be this type.  stop here
             break
         }
-        currentChild++
+        currentDef++
     }
     console.log('field options: ', theOptions)
     return theOptions
@@ -183,8 +189,8 @@ var atomRexPartial = {
     name: /^[a-zA-Z0-9\$-_]*$/
 }
 var completions = {
-    int: 0,
+    int: '0',
     $str: '$',
-    string: '"',
+    string: '""',
     name: '',
 }
