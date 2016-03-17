@@ -180,9 +180,9 @@ import astParser from './astParser'
     render(){
         var candidate = renderers[this.props.node.type]
         if(candidate){
-             return candidate.bind(this)()
+             return candidate.call(this)
         }else{
-            return renderers['generic'].bind(this)()
+            return renderers['generic'].call(this)
         }
     }
 });

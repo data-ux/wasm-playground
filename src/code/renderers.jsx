@@ -38,7 +38,7 @@ function generic(childCallback, selfNewline){
         return <span className={classes.join(' ')}>{typeName}{auto}{children}</span>
 }
 function func(){
-    return generic.bind(this)( () => {
+    return generic.call(this, () => {
         var inBlock = false
         return this.props.node.children.map((child, i) => {
                 if(i > 0 && child.type !== 'param' && child.type !== 'result' && child.type !== ''){
@@ -49,7 +49,7 @@ function func(){
     })
 }
 function afterNames(){
-    return generic.bind(this)( () => {
+    return generic.call(this, () => {
         var inBlock = false
         return this.props.node.children.map((child, i) => {
                 if(!varName.test(child.type)){
@@ -60,7 +60,7 @@ function afterNames(){
     }, true)
 }
 function tableswitch(){
-    return generic.bind(this)( () => {
+    return generic.call(this, () => {
         var inBlock = false
         return this.props.node.children.map((child, i) => {
                 if(child.type === 'table'){
@@ -71,7 +71,7 @@ function tableswitch(){
     }, true)
 }
 function alwaysBlock(){
-    return generic.bind(this)( () => {
+    return generic.call(this, () => {
         var inBlock = true
         return this.props.node.children.map((child, i) => {
                 return <AstNodeComponent key={child.id} node={child} notifyUp={this.handleNotify} newline={inBlock}/>
