@@ -67,6 +67,14 @@ export function astFilterOptionsPartial(options, candidate){
     })
 }
 
+export function astGetCompletion(option){
+    var completion = completions[option]
+    if(!completion){
+        return option
+    }
+    return completion
+}
+
 export function astOptions(node) {
     var parent = node.parent
     var nodeIndex = parent.children.indexOf(node)
@@ -173,4 +181,10 @@ var atomRexPartial = {
     $str: /^\$[a-zA-Z0-9]*$/,
     string: /^".*"$/,
     name: /^[a-zA-Z0-9\$-_]*$/
+}
+var completions = {
+    int: 0,
+    $str: '$',
+    string: '"',
+    name: '',
 }

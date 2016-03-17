@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial} from './astValidator'
+import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial, astGetCompletion} from './astValidator'
 import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
@@ -49,21 +49,20 @@ import astParser from './astParser'
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
-                if(this.state.editable.trim().length === 0 || !astValidateType(this.state.options, this.state.editable)){
-                    break
-                }
-                node.changeType(this.state.editable)
-                node.addSiblingAsFirst()
-                this.props.notifyUp()
+                var newType = astGetCompletion(this.state.tentative)
+                node.changeType(newType)
+                this.setState({editable: newType})
+                node.addChildAsFirst()
+                this.props.notifyUp(1)
                 break
             case 'Tab':
                 e.preventDefault()
-                if(this.state.editable.trim().length === 0 || !astValidateType(this.state.options, this.state.editable)){
+                if(this.state.editable.trim().length === 0 ){
                     break
                 }
-                node.changeType(this.state.editable)
+                node.changeType(astGetCompletion(this.state.tentative))
                 node.parent.addSiblingAfter(node)
-                this.props.notifyUp()
+                this.props.notifyUp(1)
                 break
             case 'Backspace':
                 if(this.state.editable.length === 0){
@@ -77,7 +76,7 @@ import astParser from './astParser'
                     e.preventDefault()
                     if(node.parent.frozen && node.parent.isFirstChild(node)){
                         node.parent.addSiblingAsFirst()
-                        this.props.notifyUp()
+                        this.props.notifyUp(1)
                         return
                     }
                     focus.previousOfType(target)
@@ -171,7 +170,7 @@ import astParser from './astParser'
         this.refs.typeName && this.refs.typeName.focus()
     },
     handleNotify(generations){
-        if(generations === 1){
+        if(generations === 1 || !generations){
             this.forceUpdate()
         }else{
             this.props.notifyUp(generations - 1)

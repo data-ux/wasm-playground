@@ -91,7 +91,7 @@ export default class AstNode {
         }
         this.type = type
     }
-    addSiblingAsFirst(){
+    addChildAsFirst(){
             this.children.unshift( new AstNode('', this) )
     }
     addSiblingAfter(child){
