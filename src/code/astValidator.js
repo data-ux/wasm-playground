@@ -23,7 +23,9 @@ function inflateRefs(rule) {
         }
         rule.ref = ref
     }
-
+    if (rule.type === 'rule') {
+        rule.deciding = calculateDecidingDefIndex(rule)
+    }
 
     var targetList
     if (rule.options) {
@@ -35,6 +37,28 @@ function inflateRefs(rule) {
     if (targetList) {
         targetList.forEach((item) => inflateRefs(item))
     }
+}
+
+function calculateDecidingDefIndex(rule){
+    if(rule.options.length <= 1) return;
+    var limit = rule.options[0].children.length
+    var i
+    var deciding
+    for (i = 0; i < limit; i++) {
+        var difference = rule.options.some( (option) => {
+            return option.children[i].name !== rule.options[0].children[i].name
+        })
+        if(difference){
+            deciding = i
+            break
+        }
+    }
+    if(typeof deciding === 'undefined'){
+        console.log('no deciding found for rule: ', rule.name)
+        return
+    }
+    console.log('deciding for rule ', rule.name, ': ', deciding)
+    return deciding
 }
 
 export function astValidateType(options, candidate){
@@ -85,17 +109,50 @@ export function astOptions(node) {
     var parent = node.parent
     var nodeIndex = parent.children.indexOf(node)
     var rule = rootRulesMap[parent.type]
+    var results
+    
     if (!rule) {
         return []
     }
     if(rule.options.length === 0){
         return []
     }
-    if (rule.type === 'rule') {
-        var options = getOptionsForIndex(rule.options[0].children, parent.children, nodeIndex)
-        return options.sort()
+    if (rule.type === 'rule' && rule.options.length === 1) {
+        results = getOptionsForIndex(rule.options[0].children, parent.children, nodeIndex)
+        return results.sort()
     }
-    // TODO multiple forms
+    var filteredOptions = getPossibleOptions(rule, node, nodeIndex)
+    var optionResults = filteredOptions.map( (option) => {
+        return getOptionsForIndex(option.children, parent.children, nodeIndex)
+    })
+    return concatAndDedup(optionResults).sort()
+}
+
+function getPossibleOptions(rule, node, nodeIndex){
+    var decidingIndex = rule.deciding
+    if(nodeIndex === decidingIndex){
+        return rule.options
+    }
+    if(nodeIndex < decidingIndex){
+        return [rule.options[0]]
+    }
+    // nodeIndex > decidingIndex === true
+    return rule.options.filter( (option) => {
+        var numOptions
+        for (var i = 0; i < decidingIndex; i++) {
+            numOptions = getOptionsForIndex(option.children, node.parent.children, i).length
+            if(numOptions === 0) return false
+        }
+        return true
+    })
+    
+}
+
+function concatAndDedup(arrayOfArray){
+    var flattened = Array.prototype.concat.apply([], arrayOfArray)
+    var nameMap = {}
+    flattened.forEach( (element) => nameMap[element] = true)
+    return Object.keys(nameMap)
 }
 
 function getOptionsForIndex(ruleDefs, siblings, index) {
