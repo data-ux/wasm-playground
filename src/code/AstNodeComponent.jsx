@@ -9,7 +9,7 @@ import astParser from './astParser'
  var AstNodeComponent = React.createClass({
     getInitialState(){
         return {
-            editable: this.props.node.type,
+            editableText: this.props.node.type,
             options: []
         }
     },
@@ -19,7 +19,7 @@ import astParser from './astParser'
         var callback
         if(astValidateTypePartial(this.state.options, '""')){
             if(newValue === '"'){
-                if(this.state.editable === '""'){
+                if(this.state.editableText === '""'){
                     newValue = ''
                 }else{
                     newValue = '""'
@@ -35,12 +35,12 @@ import astParser from './astParser'
             if(tentatives.indexOf(tentative) < 0){
                 tentative = tentatives[0]
             }
-            this.setState({editable: newValue, tentative: tentative}, callback)
+            this.setState({editableText: newValue, tentative: tentative}, callback)
         }else{
-            var delta = newValue.length - this.state.editable.length
+            var delta = newValue.length - this.state.editableText.length
             var selStart = e.target.selectionStart - delta
             var selEnd = e.target.selectionEnd - delta
-            this.setState({editable: this.state.editable}, function(){
+            this.setState({editableText: this.state.editableText}, function(){
                 input.setSelectionRange(selStart, selEnd)
             })
         }
@@ -49,7 +49,7 @@ import astParser from './astParser'
         var node = this.props.node;
         var target = e.target
         var callback
-        var newType = astGetCompletion(this.state.tentative, this.state.editable)
+        var newType = astGetCompletion(this.state.tentative, this.state.editableText)
         if(newType === '""'){
             callback = function(){target.setSelectionRange(1, 1)}
         }
@@ -57,7 +57,7 @@ import astParser from './astParser'
             case 'Enter':
                 e.preventDefault()
                 node.changeType(newType)
-                this.setState({editable: newType}, callback)
+                this.setState({editableText: newType}, callback)
                 var candidate = node.addChildAsFirst()
                 if(astOptions(candidate).length === 0){
                     node.removeChild(candidate)
@@ -67,7 +67,7 @@ import astParser from './astParser'
             case 'Tab':
                 e.preventDefault()
                 node.changeType(newType)
-                this.setState({editable: newType}, callback)
+                this.setState({editableText: newType}, callback)
                 var candidate = node.parent.addSiblingAfter(node)
                 if(astOptions(candidate).length === 0){
                     node.parent.removeChild(candidate)
@@ -75,7 +75,7 @@ import astParser from './astParser'
                 this.props.notifyUp(1)
                 break
             case 'Backspace':
-                if(this.state.editable.length === 0){
+                if(this.state.editableText.length === 0){
                     e.preventDefault()
                     this.remove()
                     focus.previousOfType(this.refs.typeName)
@@ -93,11 +93,11 @@ import astParser from './astParser'
                 }
                 break
             case 'ArrowRight':
-                    if(target.selectionStart === this.state.editable.length && target.selectionEnd === this.state.editable.length){
+                    if(target.selectionStart === this.state.editableText.length && target.selectionEnd === this.state.editableText.length){
                         e.preventDefault()
                         if(!this.props.node.children.length && node.parent.parent && node.parent.isLastChild(node)){
                             node.parent.parent.addSiblingAfter(node.parent)
-                            if(this.state.editable.trim().length === 0){
+                            if(this.state.editableText.trim().length === 0){
                                 this.remove()
                             }
                             this.props.notifyUp(2)
@@ -107,7 +107,7 @@ import astParser from './astParser'
                     }
                 break
             case 'ArrowDown':
-                var tentatives = astFilterOptionsPartial(this.state.options, this.state.editable)
+                var tentatives = astFilterOptionsPartial(this.state.options, this.state.editableText)
                 var tentative = this.state.tentative
                 var index = tentatives.indexOf(tentative)
                 if( index < 0){
@@ -119,7 +119,7 @@ import astParser from './astParser'
                 this.setState({tentative: tentative})
                 break
             case 'ArrowUp':
-                var tentatives = astFilterOptionsPartial(this.state.options, this.state.editable)
+                var tentatives = astFilterOptionsPartial(this.state.options, this.state.editableText)
                 var tentative = this.state.tentative
                 var index = tentatives.indexOf(tentative)
                 if( index < 0){
@@ -138,28 +138,28 @@ import astParser from './astParser'
         this.props.notifyUp(1)
     },
     handleBlur(){
-        if(this.state.editable.trim().length === 0){
+        if(this.state.editableText.trim().length === 0){
             this.remove()
             return
         }
-        if(astValidateType(this.state.options, this.state.editable)){
-            this.props.node.changeType(this.state.editable)
+        if(astValidateType(this.state.options, this.state.editableText)){
+            this.props.node.changeType(this.state.editableText)
             this.setState({focused: false})
         }else{
-            this.setState({editable: this.props.node.type, focused: false})
+            this.setState({editableText: this.props.node.type, focused: false})
         }
     },
     handleFocus(){
-        if(this.state.editable.substr(0, 1) === '"'){
+        if(this.state.editableText.substr(0, 1) === '"'){
             if(this.refs.typeName.selectionStart === 0){
                 this.refs.typeName.setSelectionRange(1, 1)
             }
-            if(this.refs.typeName.selectionStart === this.state.editable.length){
-                this.refs.typeName.setSelectionRange(this.state.editable.length-1, this.state.editable.length-1)
+            if(this.refs.typeName.selectionStart === this.state.editableText.length){
+                this.refs.typeName.setSelectionRange(this.state.editableText.length-1, this.state.editableText.length-1)
             }
         }
         var options = astOptions(this.props.node)
-        var tentatives = astFilterOptionsPartial(options, this.state.editable)
+        var tentatives = astFilterOptionsPartial(options, this.state.editableText)
         this.setState({options: options, tentative: tentatives[0], focused: true})
     },
     handlePaste(e){

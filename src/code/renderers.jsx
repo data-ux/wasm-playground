@@ -7,8 +7,8 @@ import {astFilterOptionsPartial} from './astValidator'
 var varName = /^\$/g
 
 function generic(childCallback, selfNewline){
-        var textWidth = measureText(this.state.editable, this.props.node.children.length)
-        var typeName = <input type='text' ref='typeName' value={this.state.editable} style={{width: Math.max(textWidth + 2, 10) + 'px'}} onFocus={this.handleFocus}
+        var textWidth = measureText(this.state.editableText, this.props.node.children.length)
+        var typeName = <input type='text' ref='typeName' value={this.state.editableText} style={{width: Math.max(textWidth + 2, 10) + 'px'}} onFocus={this.handleFocus}
                 onBlur={this.handleBlur} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled={this.props.node.frozen} onPaste={this.handlePaste}/>
         
         var children
@@ -31,7 +31,7 @@ function generic(childCallback, selfNewline){
         var auto
         var tentatives
         if(this.state.focused){
-            tentatives = astFilterOptionsPartial(this.state.options, this.state.editable)
+            tentatives = astFilterOptionsPartial(this.state.options, this.state.editableText)
             auto = <AutoComplete options={tentatives} tentative={this.state.tentative} />
         }
         
