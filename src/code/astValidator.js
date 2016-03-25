@@ -136,6 +136,43 @@ export function getUiString(option){
     return ui
 }
 
+export function clearInvalidChildren(node){
+    node.children = node.children.filter(clearRecur)
+}
+function clearRecur(node){
+    if(node.invalid) return false
+    node.children = node.children.filter(clearRecur)
+    return true
+}
+
+export function markValidityForSiblingsAfter(node, testType){
+    var oldType = node.type
+    if(typeof testType === 'string'){
+        node.type = testType
+    }
+    var parent = node.parent
+    var nodeIndex = parent.children.indexOf(node)
+    for (var i = nodeIndex; i < parent.children.length; i++) {
+        markValidity(parent.children[i])
+    }
+    node.type = oldType
+}
+
+export function markValidity(node){
+    var options = astOptions(node)
+    
+    if(options.length === 0 || !astValidateType(options, node.type)){
+        markInvalidRecur(node)
+    }else{
+        node.invalid = false
+        node.children.forEach(markValidity)
+    }
+}
+function markInvalidRecur(node){
+    node.invalid = true;
+    node.children.forEach(markInvalidRecur)
+}
+
 function getPossibleOptions(rule, node, nodeIndex){
     var decidingIndex = rule.deciding
     if(nodeIndex === decidingIndex){
@@ -255,9 +292,9 @@ var atomRexPartial = {
 }
 var completions = {
     int: '0',
-    $str: '$',
-    string: '""',
-    name: '',
+    $str: '$name',
+    string: '"str"',
+    name: 'name',
 }
 var uiStrings = {
     int: '<int>',

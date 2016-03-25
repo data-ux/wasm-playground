@@ -69,9 +69,6 @@ export default class AstNode {
         }
     }
     removeChild(child){
-        if(this.frozen && this.children.length === 1){
-            return
-        }
         var index = this.children.indexOf(child)
         if(index >= 0){
             this.children.splice(index, 1)

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial, astGetCompletion} from './astValidator'
+import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial, astGetCompletion, markValidityForSiblingsAfter, clearInvalidChildren} from './astValidator'
 import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
@@ -36,6 +36,11 @@ import astParser from './astParser'
                 tentative = tentatives[0]
             }
             this.setState({editableText: newValue, tentative: tentative}, callback)
+            if(tentatives.length === 1){
+                var testType = astGetCompletion(tentatives[0], newValue)
+                markValidityForSiblingsAfter(this.props.node, testType)
+                this.props.notifyUp(1)
+            }
         }else{
             var delta = newValue.length - this.state.editableText.length
             var selStart = e.target.selectionStart - delta
@@ -48,14 +53,9 @@ import astParser from './astParser'
     handleKeyDown: function(e){
         var node = this.props.node;
         var target = e.target
-        var callback
         var newType = astGetCompletion(this.state.tentative, this.state.editableText)
-        if(newType === '""'){
-            callback = function(){target.setSelectionRange(1, 1)}
-        }
-        if(newType === '0'){
-            callback = function(){target.setSelectionRange(0, 1)}
-        }
+        var callback = this.handleCursor(newType)
+        
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
@@ -120,6 +120,7 @@ import astParser from './astParser'
                     tentative = tentatives[index + 1]
                 }
                 this.setState({tentative: tentative})
+                this.getCompletionAndMarkSiblingsAfter(tentative)
                 break
             case 'ArrowUp':
                 var tentatives = astFilterOptionsPartial(this.state.options, this.state.editableText)
@@ -132,8 +133,14 @@ import astParser from './astParser'
                     tentative = tentatives[index - 1]
                 }
                 this.setState({tentative: tentative})
+                this.getCompletionAndMarkSiblingsAfter(tentative)
                 break
         }
+    },
+    getCompletionAndMarkSiblingsAfter(tentative){
+        var testType = astGetCompletion(tentative, this.state.editableText)
+        markValidityForSiblingsAfter(this.props.node, testType)
+        this.props.notifyUp(1)
     },
     remove(){
         var node = this.props.node;
@@ -141,7 +148,8 @@ import astParser from './astParser'
         this.props.notifyUp(1)
     },
     handleBlur(){
-        if(this.state.editableText.trim().length === 0){
+        var parent = this.props.node.parent
+        if(this.state.editableText.trim().length === 0 && !(parent.frozen && parent.children.length === 1)){
             this.remove()
             return
         }
@@ -151,6 +159,8 @@ import astParser from './astParser'
         }else{
             this.setState({editableText: this.props.node.type, focused: false})
         }
+        clearInvalidChildren(this.props.node.parent)
+        this.props.notifyUp(1)
     },
     handleFocus(){
         if(this.state.editableText.substr(0, 1) === '"'){
@@ -182,15 +192,32 @@ import astParser from './astParser'
         }
     },
     handleAutocompleteClick(option){
-        var newType = astGetCompletion(option, option)
+        var newType = astGetCompletion(option, this.state.editableText)
         var callback
-        if(newType === '""'){
-            callback = () => {this.refs.typeName.setSelectionRange(1, 1)}
+        var node = this.props.node
+        
+        node.changeType(newType)
+        markValidityForSiblingsAfter(node)
+        this.setState({tentative: option, editableText: newType}, this.handleCursor(newType))
+        this.props.notifyUp(1)
+    },
+    handleCursor(newType){
+        var callback
+        switch (newType){
+            case '"str"':
+                callback = () => {this.refs.typeName.setSelectionRange(1, 4)}
+                break
+            case '0':
+                callback = function(){this.refs.typeName.setSelectionRange(0, 1)}
+                break
+            case '$name':
+                callback = function(){this.refs.typeName.setSelectionRange(1, 5)}
+                break
+            case 'name':
+                callback = function(){this.refs.typeName.setSelectionRange(0, 4)}
+                break
         }
-        if(newType === '0'){
-            callback = function(){this.refs.typeName.setSelectionRange(0, 1)}
-        }
-        this.setState({tentative: option, editableText: newType}, callback)
+        return callback
     },
     componentDidMount(){
         this.refs.typeName && this.refs.typeName.focus()
