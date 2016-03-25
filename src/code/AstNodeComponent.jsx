@@ -166,17 +166,19 @@ import astParser from './astParser'
         this.setState({options: options, tentative: tentatives[0], focused: true})
     },
     handlePaste(e){
-        e.preventDefault()
-        var pasteText = e.clipboardData.getData("text")
-        var parsed
-        try{
-            parsed = astParser(pasteText)
-        }catch(ex){
-            console.log(ex)
-        }
-        if(parsed){
-            this.props.node.parent.replaceChild(this.props.node, parsed)
-            this.props.notifyUp(1)
+        var pasteText = e.clipboardData.getData("text").trim()
+        if(pasteText.substr(0, 1) === '('){
+            e.preventDefault()
+            var parsed
+            try{
+                parsed = astParser(pasteText)
+            }catch(ex){
+                console.log(ex)
+            }
+            if(parsed && astValidateType(this.state.options, parsed.type)){
+                this.props.node.parent.replaceChild(this.props.node, parsed)
+                this.props.notifyUp(1)
+            }
         }
     },
     handleAutocompleteClick(option){
