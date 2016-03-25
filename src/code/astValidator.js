@@ -280,13 +280,13 @@ function matchesDef(ruleDef, node) {
 
 var atomRex = {
     int: /^[0-9]+$/,
-    $str: /^\$[a-zA-Z0-9]+$/,
+    $str: /^\$[a-zA-Z0-9-]+$/,
     string: /^".+"$/,
     name: /^[a-zA-Z0-9\$-_]+$/
 }
 var atomRexPartial = {
     int: /^[0-9]*$/,
-    $str: /^\$[a-zA-Z0-9]*$/,
+    $str: /^\$[a-zA-Z0-9-]*$/,
     string: /^".*"$/,
     name: /^[a-zA-Z0-9\$-_]*$/
 }

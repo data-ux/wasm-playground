@@ -78,7 +78,7 @@ import astParser from './astParser'
                 this.props.notifyUp(1)
                 break
             case 'Backspace':
-                if(this.state.editableText.length === 0){
+                if(this.state.editableText.trim().length === 0 && !(node.parent.frozen && node.parent.children.length === 1)){
                     e.preventDefault()
                     this.remove()
                     focus.previousOfType(this.refs.typeName)
