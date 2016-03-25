@@ -47,6 +47,20 @@ div.editor-view{
     padding: 10px;
     flex: auto;
     padding-bottom: 50px;
+    position: relative;
+}
+div.editor-view .clear-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 40px;
+    font-family: 'Source Sans Pro', sans-serif;
+    cursor: pointer;
+    color: #aaa;
 }
 
 div.wasmjs-console{
