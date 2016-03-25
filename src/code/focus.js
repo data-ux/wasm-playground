@@ -14,6 +14,14 @@ function doFocus(DomElement, delta) {
     if(index < 0 || index >= elements.length){
         return
     }
+    if(DomElement.tagName === 'input' || DomElement.tagName === 'INPUT'){
+        if(delta > 0){
+            elements[index].setSelectionRange(0, 0)
+        }else{
+            let len = elements[index].value.length
+            elements[index].setSelectionRange(len, len)
+        }
+    }
     elements[index].focus();
 }
 
