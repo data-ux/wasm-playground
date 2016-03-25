@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial, astGetCompletion, markValidityForSiblingsAfter, clearInvalidChildren} from './astValidator'
+import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial, astGetCompletion, markValidity, markValidityForSiblingsAfter, clearInvalidChildren} from './astValidator'
 import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
@@ -186,7 +186,10 @@ import astParser from './astParser'
                 console.log(ex)
             }
             if(parsed && astValidateType(this.state.options, parsed.type)){
-                this.props.node.parent.replaceChild(this.props.node, parsed)
+                this.props.node.type = parsed.type
+                this.props.node.children = parsed.children
+                markValidity(this.props.node)
+                this.setState({editableText: parsed.type})
                 this.props.notifyUp(1)
             }
         }
@@ -220,7 +223,9 @@ import astParser from './astParser'
         return callback
     },
     componentDidMount(){
-        this.refs.typeName && this.refs.typeName.focus()
+        if(!this.props.node.invalid){
+            this.refs.typeName && this.refs.typeName.focus()
+        }
     },
     handleNotify(generations){
         if(generations === 1 || !generations){
