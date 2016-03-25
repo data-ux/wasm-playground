@@ -11,7 +11,7 @@ function doFocus(DomElement, delta) {
     var nodeList = document.querySelectorAll(DomElement.tagName + ':not(:disabled)')
     var elements = Array.prototype.slice.call(nodeList)
     var index = elements.indexOf(DomElement) + delta
-    if(index < 0 || index >= elements.length){
+    if(index < 0 || index >= elements.length-1){
         return
     }
     if(DomElement.tagName === 'input' || DomElement.tagName === 'INPUT'){

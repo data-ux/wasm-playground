@@ -53,6 +53,9 @@ import astParser from './astParser'
         if(newType === '""'){
             callback = function(){target.setSelectionRange(1, 1)}
         }
+        if(newType === '0'){
+            callback = function(){target.setSelectionRange(0, 1)}
+        }
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
@@ -182,7 +185,9 @@ import astParser from './astParser'
         if(newType === '""'){
             callback = () => {this.refs.typeName.setSelectionRange(1, 1)}
         }
-        this.props.node.changeType(newType)
+        if(newType === '0'){
+            callback = function(){this.refs.typeName.setSelectionRange(0, 1)}
+        }
         this.setState({tentative: option, editableText: newType}, callback)
     },
     componentDidMount(){
