@@ -176,6 +176,15 @@ import astParser from './astParser'
             this.props.notifyUp(1)
         }
     },
+    handleAutocompleteClick(option){
+        var newType = astGetCompletion(option, option)
+        var callback
+        if(newType === '""'){
+            callback = () => {this.refs.typeName.setSelectionRange(1, 1)}
+        }
+        this.props.node.changeType(newType)
+        this.setState({tentative: option, editableText: newType}, callback)
+    },
     componentDidMount(){
         this.refs.typeName && this.refs.typeName.focus()
     },

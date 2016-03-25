@@ -32,7 +32,7 @@ function generic(childCallback, selfNewline){
         var tentatives
         if(this.state.focused){
             tentatives = astFilterOptionsPartial(this.state.options, this.state.editableText)
-            auto = <AutoComplete options={tentatives} tentative={this.state.tentative} />
+            auto = <AutoComplete options={tentatives} tentative={this.state.tentative} onAutocompleteClick={this.handleAutocompleteClick} />
         }
         
         return <span className={classes.join(' ')}>{typeName}{auto}{children}</span>

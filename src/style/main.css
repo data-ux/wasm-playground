@@ -163,7 +163,16 @@ div.auto-complete-list{
     top: 0;
     background-color: #eee;
     border: #aaa solid 1px;
+    z-index: 10;
 }
-div.auto-complete-list div.active{
+
+div.auto-complete-list div.auto-complete-row{
+    padding: 0 5px;
+    cursor: pointer;
+}
+div.auto-complete-list div.auto-complete-row:not(.active):hover{
+    background-color: #ccc;
+}
+div.auto-complete-list div.auto-complete-row.active{
     background-color: #666;
 }
