@@ -128,6 +128,14 @@ export function astOptions(node) {
     return concatAndDedup(optionResults).sort()
 }
 
+export function getUiString(option){
+    var ui = uiStrings[option]
+    if(typeof ui === 'undefined'){
+        return option
+    }
+    return ui
+}
+
 function getPossibleOptions(rule, node, nodeIndex){
     var decidingIndex = rule.deciding
     if(nodeIndex === decidingIndex){
@@ -250,4 +258,10 @@ var completions = {
     $str: '$',
     string: '""',
     name: '',
+}
+var uiStrings = {
+    int: '<int>',
+    $str: '<$name>',
+    string: '<string>',
+    name: '<name>'
 }
