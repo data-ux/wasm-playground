@@ -55,7 +55,7 @@ import astParser from './astParser'
         var target = e.target
         var newType = astGetCompletion(this.state.tentative, this.state.editableText)
         var callback = this.handleCursor(newType)
-        
+
         switch(e.key){
             case 'Enter':
                 e.preventDefault()
@@ -213,11 +213,20 @@ import astParser from './astParser'
             case '0':
                 callback = function(){this.refs.typeName.setSelectionRange(0, 1)}
                 break
+            case '0.0':
+                callback = function(){this.refs.typeName.setSelectionRange(0, 3)}
+                break
             case '$name':
                 callback = function(){this.refs.typeName.setSelectionRange(1, 5)}
                 break
             case 'name':
                 callback = function(){this.refs.typeName.setSelectionRange(0, 4)}
+                break
+            case 'offset=0':
+                callback = function(){this.refs.typeName.setSelectionRange(7, 8)}
+                break
+            case 'align=8':
+                callback = function(){this.refs.typeName.setSelectionRange(6, 7)}
                 break
         }
         return callback

@@ -64,7 +64,7 @@ function calculateDecidingDefIndex(rule){
 export function astValidateType(options, candidate){
     return options.some( (option) => {
         var tester = atomRex[option]
-        if (!tester) {
+        if (typeof tester === 'undefined') {
             return option === candidate
         }
         return tester.test(candidate)
@@ -74,7 +74,7 @@ export function astValidateType(options, candidate){
 export function astValidateTypePartial(options, candidate){
     return options.some( (option) => {
         var tester = atomRexPartial[option]
-        if (!tester) {
+        if (typeof tester === 'undefined') {
             return option.substr(0, candidate.length) === candidate
         }
         return tester.test(candidate)
@@ -87,7 +87,7 @@ export function astFilterOptionsPartial(options, candidate){
     }
     return options.filter( (option) => {
         var tester = atomRexPartial[option]
-        if (!tester) {
+        if (typeof tester === 'undefined') {
             return option.substr(0, candidate.length) === candidate
         }
         return tester.test(candidate)
@@ -152,7 +152,7 @@ export function markValidityForSiblingsAfter(node, testType){
     }
     var parent = node.parent
     var nodeIndex = parent.children.indexOf(node)
-    for (var i = nodeIndex; i < parent.children.length; i++) {
+    for (var i = nodeIndex+1; i < parent.children.length; i++) {
         markValidity(parent.children[i])
     }
     node.type = oldType
@@ -271,7 +271,7 @@ function matchesDef(ruleDef, node) {
     }
     function formTest(form) {
         var tester = atomRex[form.name]
-        if (!tester) {
+        if (typeof tester === 'undefined') {
             return form.name == node.type
         }
         return tester.test(node.type)
@@ -280,25 +280,37 @@ function matchesDef(ruleDef, node) {
 
 var atomRex = {
     int: /^[0-9]+$/,
+    float: /^[0-9]+(\.[0-9]+)?$/,
     $str: /^\$[a-zA-Z0-9-]+$/,
     string: /^".+"$/,
-    name: /^[a-zA-Z0-9\$-_]+$/
+    name: /^[a-zA-Z0-9\$-_]+$/,
+    offset: /^offset=[0-9]+$/,
+    align: /^align=(1|2|4|8|16|32|64)$/
 }
 var atomRexPartial = {
     int: /^[0-9]*$/,
+    float: /^[0-9]+(\.[0-9]*)?$/,
     $str: /^\$[a-zA-Z0-9-]*$/,
     string: /^".*"$/,
-    name: /^[a-zA-Z0-9\$-_]*$/
+    name: /^[a-zA-Z0-9\$-_]*$/,
+    offset: /(^offset=|^offset|^offse|^offs|^off|^of|^o)[0-9]*$/,
+    align: /(^align=|^align|^alig|^ali|^al|^a)(1|2|3|4|6|8|16|32|64)?$/
 }
 var completions = {
     int: '0',
+    float: '0.0',
     $str: '$name',
     string: '"str"',
     name: 'name',
+    offset: 'offset=0',
+    align: 'align=8'
 }
 var uiStrings = {
     int: '<int>',
+    float: '<float>',
     $str: '<$name>',
     string: '<string>',
-    name: '<name>'
+    name: '<name>',
+    offset: '<offset>',
+    align: '<align>'
 }
