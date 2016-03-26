@@ -57,7 +57,7 @@ function calculateDecidingDefIndex(rule){
         console.log('no deciding found for rule: ', rule.name)
         return
     }
-    console.log('deciding for rule ', rule.name, ': ', deciding)
+    //console.log('deciding for rule ', rule.name, ': ', deciding)
     return deciding
 }
 
@@ -137,12 +137,16 @@ export function getUiString(option){
 }
 
 export function clearInvalidChildren(node){
-    node.children = node.children.filter(clearRecur)
-}
-function clearRecur(node){
-    if(node.invalid) return false
-    node.children = node.children.filter(clearRecur)
-    return true
+    var array = node.children
+    var i = 0
+    while(i < array.length){
+        if(array[i].invalid){
+            array.splice(i, 1)
+        }else{
+            clearInvalidChildren(array[i])
+            i++
+        }
+    }
 }
 
 export function markValidityForSiblingsAfter(node, testType){
@@ -204,23 +208,23 @@ function getOptionsForIndex(ruleDefs, siblings, index) {
     // let's see how sibligns "eat up" the ruleDefs
     var currentDef = 0
     var i = 0;
-    console.log('eating starts  ---------------------')
+    //console.log('eating starts  ---------------------')
     while (i < index) {
         var sibling = siblings[i];
         if (matchesDef(ruleDefs[currentDef], sibling)) {
             i++
             if (ruleDefs[currentDef].repeat !== '*') {
-                console.log('child eaten: ', ruleDefs[currentDef].name, ' by ', sibling.type)
+                //console.log('child eaten: ', ruleDefs[currentDef].name, ' by ', sibling.type)
                 currentDef++
             }
         } else {
-            console.log('child eaten: ', ruleDefs[currentDef].name, ' by ', sibling.type)
+            //console.log('child eaten: ', ruleDefs[currentDef].name, ' by ', sibling.type)
             currentDef++
         }
 
 
         if (currentDef >= ruleDefs.length) {
-            console.log('ran out of ruleDefs!')
+            //console.log('ran out of ruleDefs!')
             return []
         }
     }
@@ -235,7 +239,7 @@ function getOptionsForIndex(ruleDefs, siblings, index) {
         }
         currentDef++
     }
-    console.log('field options: ', theOptions)
+    //console.log('field options: ', theOptions)
     return theOptions
 }
 
