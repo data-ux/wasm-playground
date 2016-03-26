@@ -59,8 +59,9 @@ div.editor-view .clear-button{
     line-height: 40px;
     font-size: 40px;
     font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
     cursor: pointer;
-    color: #aaa;
+    color: #ccc;
 }
 
 div.wasmjs-console{
@@ -130,7 +131,7 @@ span.ast-node, span.ast-node input{
     font-size: 16px;
 }
 span.ast-node{
-    line-height: 24px;
+    line-height: 25px;
 }
 span.ast-node.has-children > input, span.bolded.ast-node{
     font-weight: 600;
@@ -146,9 +147,9 @@ span.ast-node.has-children:after{
     content: ')';
 }
 span.ast-node input{
-    border: 1px solid #fff;
+    border: 1px solid #eee;
     background-color: transparent;
-    padding: 0 0px 2px 0px;
+    padding: 1px 0px 1px 0px;
 }
 span.ast-node input.invalid{
     background-color: #f88;
@@ -158,6 +159,7 @@ span.ast-node input:focus{
     border: 1px solid #2feeff;
 }
 span.ast-node input:disabled{
+    border: 1px solid #fff;
     background-color: transparent;
     color: #000;
 }
