@@ -3,7 +3,12 @@ import React from 'react'
 
 var WasmJsConsole = React.createClass({
     getInitialState(){
-        return {outputList: [], count: 0}
+        return {
+            outputList: [],
+            count: 0,
+            history: [],
+            historyPointer: 0
+        }
     },
     componentWillReceiveProps(nextProps){
       if(nextProps.output.count > this.state.count){
@@ -27,10 +32,37 @@ var WasmJsConsole = React.createClass({
     },
     handleKeyDown: function(e){
         var target = e.target
-        if(e.key === 'Enter'){
-            e.preventDefault()
-            this.props.onCommand(this.refs.input.value)
-            this.refs.input.value = ""
+        switch(e.key){
+            case 'Enter':
+                e.preventDefault()
+                this.props.onCommand(this.refs.input.value)
+                this.state.history.push(this.refs.input.value)
+                if(this.state.history.length > 25){
+                    this.state.history.splice(0, 5)
+                }
+                this.refs.input.value = ''
+                this.setState({historyPointer: this.state.history.length})
+                break
+            case 'ArrowUp':
+                e.preventDefault()
+                if(this.state.historyPointer === 0 ){
+                    break
+                }
+                this.setState(function(previousState, currentProps){return {historyPointer: previousState.historyPointer-1}})
+                this.refs.input.value = this.state.history[this.state.historyPointer-1]
+                break
+            case 'ArrowDown':
+                e.preventDefault()
+                if(this.state.history.length === 0 || this.state.historyPointer >= this.state.history.length){
+                    break
+                }
+                if(this.state.historyPointer === this.state.history.length-1){
+                    this.refs.input.value = ''
+                }else{
+                    this.refs.input.value = this.state.history[this.state.historyPointer+1]
+                }
+                this.setState(function(previousState, currentProps){return {historyPointer: previousState.historyPointer+1}})
+                break
         }
     },
     render(){
