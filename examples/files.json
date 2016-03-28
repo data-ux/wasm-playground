@@ -1,0 +1,4 @@
+[
+    {"name": "factorial", "file": "factorial.wast"},
+    {"name": "add", "file": "add.wast"}
+]

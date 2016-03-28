@@ -208,6 +208,14 @@ div.auto-complete-list div.auto-complete-row.active{
 }
 
 
+/* Header UI area */
+
+.header-ui{
+    float: right;
+    display: inline-block;
+    vertical-align: top;
+}
+
 /* Info popup */
 
 .info-holder{
@@ -215,14 +223,13 @@ div.auto-complete-list div.auto-complete-row.active{
     position: relative;
     vertical-align: top;
     height: 25px;
-    float: right;
     padding: 5px 5px;
 }
 .info-holder button{
-    background: transparent;
     border: 1px solid rgba(255,255,255,1);
     border-radius: 4px;
-    color: #fff;
+    background: #fff;
+    color: rgba(33, 150, 243, 1);
     height: 25px;
     display: inline-block;
     margin: 0;
@@ -233,8 +240,8 @@ div.auto-complete-list div.auto-complete-row.active{
     cursor: pointer;
 }
 .info-holder button.active{
-    background: #fff;
-    color: rgba(33, 150, 243, 1);
+    background: transparent;
+    color: #fff;
 }
 .info-popup{
     position: absolute;
@@ -273,6 +280,7 @@ div.auto-complete-list div.auto-complete-row.active{
 .info-popup button{
     background: rgba(33, 150, 243, 1);
     border: 1px solid rgba(33, 150, 243, 1);
+    color: #fff;
 }
 .info-popup p.credits{
     margin: 0;
@@ -280,4 +288,26 @@ div.auto-complete-list div.auto-complete-row.active{
     position: absolute;
     bottom: -1px;
     left: 0;
+}
+
+/* Examples menu */
+.example-holder{
+    display: inline-block;
+    vertical-align: top;
+    height: 25px;
+    padding: 5px;
+}
+.example-holder select{
+    border: 1px solid rgba(255,255,255,1);
+    background: transparent;
+    color: #fff;
+    border-radius: 4px;
+    height: 25px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    -moz-appearance: none;
+}
+.example-holder select:focus{
+    outline: none;
 }

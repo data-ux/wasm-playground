@@ -16,7 +16,7 @@ var InfoPopup = React.createClass({
             <a href="http://webassembly.github.io/" target="_blank">WebAssembly</a> is the upcoming efficient low&#8209;level language for the web. 
             </p>
             <p>
-            WebAssembly code is in the form of an abstract syntax tree (AST), 
+            WebAssembly code is formed as an abstract syntax tree (AST), 
             represented here in textual S&#8209;expression format. You can edit the 
             AST and call the exported functions in the console below. 
            

@@ -27,13 +27,6 @@ var EditorView = React.createClass({
     }
 })
 
-function AJAX(url, success) {
-    var oReq = new XMLHttpRequest();
-    oReq.addEventListener("load", function() { success(this.responseText) });
-    oReq.open("GET", url);
-    oReq.send();
-}
-
 export default EditorView
 
 
