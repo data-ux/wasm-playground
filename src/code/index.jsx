@@ -46,6 +46,7 @@ var App = React.createClass({
         })
         attachWasm((compileFunc) => {
             this.compile = compileFunc
+            this.doCompile()
             setInterval(() => {
                 this.doCompile()
             }, 3000)

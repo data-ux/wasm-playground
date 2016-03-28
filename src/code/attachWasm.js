@@ -54,5 +54,5 @@ export default function attachWasm(callback){
     }
 
     document.body.appendChild(wasmjsTag)
-    wasmjsTag.src = '/vendor/wasm.js'
+    wasmjsTag.src = 'vendor/wasm.js'
 }
