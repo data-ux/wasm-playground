@@ -163,7 +163,7 @@ span.ast-node input.invalid{
 }
 span.ast-node input:focus{
     outline: none;
-    border: 1px solid #2feeff;
+    border: 1px solid rgba(33, 150, 243, 1);
 }
 span.ast-node input:disabled{
     border: 1px solid #fff;
@@ -200,10 +200,11 @@ div.auto-complete-list div.auto-complete-row{
     cursor: pointer;
 }
 div.auto-complete-list div.auto-complete-row:not(.active):hover{
-    background-color: rgba(47, 238, 255, 0.2);
+    background-color: rgba(33, 150, 243, 0.2);
 }
 div.auto-complete-list div.auto-complete-row.active{
-    background-color: #2feeff;
+    background-color: rgba(33, 150, 243, 1);
+    color: #fff;
 }
 
 
