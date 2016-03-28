@@ -307,6 +307,7 @@ div.auto-complete-list div.auto-complete-row.active{
     font-size: 14px;
     font-weight: 400;
     -moz-appearance: none;
+    cursor: pointer;
 }
 .example-holder select:focus{
     outline: none;

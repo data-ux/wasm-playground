@@ -45,6 +45,7 @@ var App = React.createClass({
             this.setState({examples: examples})
         })
         attachWasm((compileFunc) => {
+            this.compile = compileFunc
             setInterval(() => {
                 this.doCompile()
             }, 3000)
@@ -54,7 +55,7 @@ var App = React.createClass({
         var str = astPrinter(this.state.rootNode)
         var exports
         try {
-            exports = window.test(str)
+            exports = this.compile(str)
         } catch (e) {
             console.log(e)
             exports = null
