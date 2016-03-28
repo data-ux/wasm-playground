@@ -8,10 +8,10 @@ document.body.appendChild(bold)
 
 function measure(str, useBold){
     if(useBold){
-        bold.innerText = str;
+        bold.textContent = str;
         return bold.getBoundingClientRect().width
     }else{
-        regular.innerText = str;
+        regular.textContent = str;
         return regular.getBoundingClientRect().width
     }
     
