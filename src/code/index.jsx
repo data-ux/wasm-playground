@@ -20,14 +20,14 @@ import attachWasm from './attachWasm'
 //App component
 var App = React.createClass({
     getInitialState(){
-        var stored = window.localStorage.getItem('ast')
         var rootNode
-
+        var initialExamples = [{name: 'add integer', code: '(module(func $add (param $x i32) (param $y i32) (result i32) (i32.add (get_local $x) (get_local $y)))(export "add" $add))'}]
+        
+        var stored = window.localStorage.getItem('ast')
         if (stored) {
             rootNode = AstNode.parse(stored)
         } else {
-            rootNode = new AstNode('module')
-            rootNode.addChild(new AstNode('', rootNode))
+            rootNode =  astParser(initialExamples[0].code)
         }
         rootNode.setFrozen(true)
         
@@ -37,7 +37,7 @@ var App = React.createClass({
             color: "#008800",
             exports: null,
             output: {count : 0, msg: ""},
-            examples: [{name: 'factorial', code: '(module (function))'}]
+            examples: initialExamples
         }
     },
     componentDidMount() {

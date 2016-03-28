@@ -19,14 +19,15 @@ var InfoPopup = React.createClass({
             WebAssembly code is formed as an abstract syntax tree (AST), 
             represented here in textual S&#8209;expression format. You can edit the 
             AST and call the exported functions in the console below. 
-           
+            </p>
+            <p>
+            The editor enforces AST validity, i.e. you can only type names of nodes that can be used in a certain context.
             </p>
             <h3>Editor controls</h3>
             <table>
             <tbody>
             <tr><td><strong>Return:</strong></td><td> Add child to current node</td></tr>
             <tr><td><strong>Tab:</strong></td><td> Add new node after current node</td></tr>
-            <tr><td><strong>Left/right arrows:</strong></td><td> Move from node to node</td></tr>
             </tbody>
             </table>
             <div className='button-row'><p className='credits'>Created by Jan Wolski. Powered by <a href="https://github.com/WebAssembly/binaryen" target="_blank">binaryen</a>.</p><button onClick={this.handleClick} onMouseDown={prevent}>Got it!</button></div>

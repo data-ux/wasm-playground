@@ -3,7 +3,7 @@ import React from 'react'
 
 var ExamplesMenu = React.createClass({
     getInitialState(){
-        return {selected: 'factorial'}
+        return {selected: this.props.examples[0].name}
     },
     handleChange(e){
         this.setState({selected: e.target.value})
