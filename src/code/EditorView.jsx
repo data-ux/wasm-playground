@@ -23,7 +23,7 @@ var EditorView = React.createClass({
         this.forceUpdate();
     },
     render() {
-        return <div className="editor-view"><AstNodeComponent node={this.props.root} notifyUp={this.handleNotify}/><ClearButton onClear={this.handleClear}/></div>
+        return <div className={"editor-view " + this.props.textFormat}><AstNodeComponent node={this.props.root} notifyUp={this.handleNotify}/><ClearButton onClear={this.handleClear}/></div>
     }
 })
 

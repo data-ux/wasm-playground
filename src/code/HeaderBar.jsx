@@ -8,10 +8,19 @@ var HeaderBar = React.createClass({
         return (
         <div className="header-bar">
             <h1>ast.run</h1><h2>WebAssembly playground</h2>
-            <div className="header-ui"><DropdownMenu options={this.props.examples} onSelect={this.props.onExampleChange}/><InfoPopup /></div>
+            <div className="header-ui">
+                <DropdownMenu options={this.props.examples} onSelect={this.props.onExampleChange}/>
+                <DropdownMenu options={formats} onSelect={this.props.onFormatChange}/>
+                <InfoPopup />
+            </div>
         </div>
         )
     }
 })
+
+var formats = [
+    {name: 's-expression'},
+    {name: 'indentation only'}
+]
 
 export default HeaderBar

@@ -37,7 +37,8 @@ var App = React.createClass({
             color: "#008800",
             exports: null,
             output: {count : 0, msg: ""},
-            examples: initialExamples
+            examples: initialExamples,
+            textFormat: 's-expression'
         }
     },
     componentDidMount() {
@@ -109,11 +110,14 @@ var App = React.createClass({
         
         this.setState({rootNode: rootNode})
     },
+    handleFormatChange(format){
+        this.setState({textFormat: format})
+    },
     render(){
         return (
             <div className="main-wrapper">
-                <HeaderBar examples={this.state.examples} onExampleChange={this.handleExampleChange}/>
-                <EditorView root={this.state.rootNode} />
+                <HeaderBar examples={this.state.examples} onExampleChange={this.handleExampleChange} onFormatChange={this.handleFormatChange}/>
+                <EditorView root={this.state.rootNode} textFormat={this.state.textFormat} />
                 <WasmJsConsole onCommand={this.handleConsoleCommand} output={this.state.output} alertText={this.state.alert} alertColor={this.state.color} />
             </div>
             )
