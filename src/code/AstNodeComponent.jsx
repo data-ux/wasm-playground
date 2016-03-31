@@ -244,11 +244,13 @@ import astParser from './astParser'
         }
     },
     render(){
-        var candidate = renderers[this.props.node.type]
+        var renderesInUse = renderers[this.props.textFormat]
+
+        var candidate = renderesInUse[this.props.node.type]
         if(candidate){
-             return candidate.call(this)
+            return candidate.call(this)
         }else{
-            return renderers['generic'].call(this)
+            return renderesInUse['generic'].call(this)
         }
     }
 });

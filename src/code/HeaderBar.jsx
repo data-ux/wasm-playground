@@ -20,7 +20,7 @@ var HeaderBar = React.createClass({
 
 var formats = [
     {name: 's-expression'},
-    {name: 'indentation only'}
+    {name: 'indentation'}
 ]
 
 export default HeaderBar

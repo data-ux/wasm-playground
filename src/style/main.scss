@@ -143,16 +143,6 @@ span.ast-node{
 span.ast-node.has-children > input, span.bolded.ast-node{
     font-weight: 600;
 }
-span.ast-node.no-children:before{
-    content: ' ';
-    white-space: pre;
-}
-span.ast-node.has-children:before{
-    content: ' (';
-}
-span.ast-node.has-children:after{
-    content: ')';
-}
 span.ast-node input{
     border: 1px solid #eee;
     background-color: transparent;
@@ -178,6 +168,29 @@ span.ast-node.dummy{
     visibility: hidden;
 }
 
+.s-expression{
+    span.ast-node.no-children:before{
+        content: ' ';
+        white-space: pre;
+    }
+    span.ast-node.has-children:before{
+        content: ' (';
+    }
+    span.ast-node.has-children:after{
+        content: ')';
+    }
+}
+.indentation{
+    span.ast-node.newline{
+        padding-left: 15px;
+    }
+    span.ast-node input{
+        margin-right: 2px;
+    }
+    span.ast-node{
+        line-height: 27px;
+    }
+}
 
 /* auto complete */
 
