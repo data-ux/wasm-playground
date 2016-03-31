@@ -290,14 +290,14 @@ div.auto-complete-list div.auto-complete-row.active{
     left: 0;
 }
 
-/* Examples menu */
-.example-holder{
+/* Dropdown menu */
+.menu-holder{
     display: inline-block;
     vertical-align: top;
     height: 25px;
     padding: 5px;
 }
-.example-holder select{
+.menu-holder select{
     border: 1px solid rgba(255,255,255,1);
     background: transparent;
     color: #fff;
@@ -309,6 +309,6 @@ div.auto-complete-list div.auto-complete-row.active{
     -moz-appearance: none;
     cursor: pointer;
 }
-.example-holder select:focus{
+.menu-holder select:focus{
     outline: none;
 }
