@@ -16,6 +16,8 @@ import loadExamples from './loadExamples'
 import analyzeExports from './analyzeExports'
 import attachWasm from './attachWasm'
 
+require("../style/main.scss")
+
 
 //App component
 var App = React.createClass({

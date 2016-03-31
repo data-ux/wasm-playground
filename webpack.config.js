@@ -19,6 +19,10 @@ module.exports = {
             {
                 test: /\.pegjs$/,
                 loader: 'pegjs-loader'
+            },
+            {
+                test: /\.scss$/,
+                loaders: ["style", "css", "sass"]
             }
         ]
     },
