@@ -15,6 +15,7 @@ import astValidator from './astValidator'
 import loadExamples from './loadExamples'
 import analyzeExports from './analyzeExports'
 import attachWasm from './attachWasm'
+import delayTimer from './delayTimer'
 
 require("../style/main.scss")
 
@@ -42,9 +43,9 @@ var App = React.createClass({
         attachWasm((compileFunc) => {
             this.compile = compileFunc
             this.doCompile()
-            setInterval(() => {
+            delayTimer.onTimer( () => {
                 this.doCompile()
-            }, 3000)
+            })
         })
     },
     doCompile(){
@@ -101,8 +102,7 @@ var App = React.createClass({
         
         var rootNode = astParser(match.code)
         rootNode.setFrozen(true)
-        
-        this.setState({rootNode: rootNode})
+        this.setState({rootNode: rootNode}, () => {this.doCompile()})
     },
     handleFormatChange(format){
         this.setState({textFormat: format.className})

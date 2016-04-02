@@ -4,6 +4,7 @@ import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPar
 import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
+import delayTimer from './delayTimer'
 
 var focusNextCreated = false;
 
@@ -69,6 +70,7 @@ var focusNextCreated = false;
                     focusNextCreated = true;
                 }
                 this.props.notifyUp(1)
+                delayTimer.activateDelay();
                 break
             case 'Tab':
                 e.preventDefault()
@@ -81,6 +83,7 @@ var focusNextCreated = false;
                     focusNextCreated = true;
                 }
                 this.props.notifyUp(1)
+                delayTimer.activateDelay();
                 break
             case 'Backspace':
                 if(this.state.editableText.trim().length === 0 && !(node.parent.frozen && node.parent.children.length === 1)){
@@ -163,6 +166,7 @@ var focusNextCreated = false;
         if(astValidateType(this.state.options, this.state.editableText)){
             this.props.node.changeType(this.state.editableText)
             this.setState({focused: false})
+            delayTimer.activateDelay();
         }else{
             this.setState({editableText: this.props.node.type, focused: false})
         }
@@ -210,6 +214,7 @@ var focusNextCreated = false;
         markValidityForSiblingsAfter(node)
         this.setState({tentative: option, editableText: newType}, this.handleCursor(newType))
         this.props.notifyUp(1)
+        delayTimer.activateDelay();
     },
     handleCursor(newType){
         var callback
