@@ -3,11 +3,15 @@ import React from 'react'
 
 var DropdownMenu = React.createClass({
     getInitialState(){
-        return {selected: this.props.options[0].name}
+        return {selected: this.props.options[0]}
     },
     handleChange(e){
-        this.setState({selected: e.target.value})
-        this.props.onSelect(e.target.value)
+        var newSelection = this.props.options.find( (option) => {
+            return option.name === e.target.value
+        })
+        if(!newSelection) return
+        this.setState({selected: newSelection})
+        this.props.onSelect(newSelection)
     },
     render(){
         var options = this.props.options.map( (example) => {
@@ -15,7 +19,8 @@ var DropdownMenu = React.createClass({
         })
         return (
         <div className="menu-holder">
-            <select value={this.state.selected} onChange={this.handleChange}>
+        <label className="menu-label">{this.props.label}</label>
+            <select value={this.state.selected.name} onChange={this.handleChange}>
                 {options}
             </select>
         </div>

@@ -19,7 +19,6 @@ import attachWasm from './attachWasm'
 require("../style/main.scss")
 
 
-//App component
 var App = React.createClass({
     getInitialState(){
         var rootNode
@@ -101,9 +100,9 @@ var App = React.createClass({
         }
         this.setState({output: {count : this.state.output.count + 1, msg: result}})
     },
-    handleExampleChange(exampleName){
+    handleExampleChange(newExample){
         var match = this.state.examples.find(function(example){
-            return example.name === exampleName
+            return example.name === newExample.name
         })
         if(!match) return
         
@@ -113,7 +112,7 @@ var App = React.createClass({
         this.setState({rootNode: rootNode})
     },
     handleFormatChange(format){
-        this.setState({textFormat: format})
+        this.setState({textFormat: format.className})
     },
     render(){
         return (
