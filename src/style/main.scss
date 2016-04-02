@@ -1,48 +1,6 @@
 /* main layout */
 
-html, body, .main-wrapper, #react-target{
-    margin: 0;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-}
-a{
-    color:#2196f3;
-}
-
-.main-wrapper{
-    display: flex;
-    flex-flow: column;
-}
-
-div.header-bar{
-    height: 35px;
-    background-color: #2196f3;
-    box-shadow: 0 0 4px rgba(0,0,0, 0.4);
-    flex: none;
-    padding: 0 0 0 10px;
-    overflow: visible;
-}
-div.header-bar h1{
-    margin: 0;
-    display: inline-block;
-    height: 35px;
-    line-height: 31px;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 300;
-    font-size: 28px;
-    color: #fff;
-}
-div.header-bar h2{
-    margin: 0 0 0 20px;
-    display: inline-block;
-    height: 30px;
-    line-height: 31px;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 300;
-    font-size: 18px;
-    color: rgba(255,255,255, 1);
-}
+// Basic styles in index.html
 
 div.editor-view{
     overflow-x: hidden;

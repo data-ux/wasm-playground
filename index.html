@@ -3,13 +3,61 @@
 <head>
     <title>WebAssembly playground</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,600italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300&text=ast.runWebassembly%20playground%C3%97' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300&text=ast.runWebAssembly%20playground%C3%97' rel='stylesheet'
+    type='text/css'>
+    <style>
+        html, body, .main-wrapper, #react-target{
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+        a{
+            color:#2196f3;
+        }
+        .main-wrapper{
+            display: flex;
+            flex-flow: column;
+        }
+        div.header-bar{
+            height: 35px;
+            background-color: #2196f3;
+            box-shadow: 0 0 4px rgba(0,0,0, 0.4);
+            flex: none;
+            padding: 0 0 0 10px;
+            overflow: visible;
+        }
+        div.header-bar h1{
+            margin: 0;
+            display: inline-block;
+            height: 35px;
+            line-height: 31px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 300;
+            font-size: 28px;
+            color: #fff;
+        }
+        div.header-bar h2{
+            margin: 0 0 0 20px;
+            display: inline-block;
+            height: 30px;
+            line-height: 31px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 300;
+            font-size: 18px;
+            color: rgba(255,255,255, 1);
+        }
+    </style>
 </head>
 <body>
-    
+
     <div id="react-target">
-        <!-- this is where the root react component will get rendered -->
+        <div class="main-wrapper">
+            <div class="header-bar">
+                <h1>ast.run</h1><h2>WebAssembly playground</h2>
+            </div>
+        </div>
     </div>
     <!-- include the webpack-dev-server script so our scripts get reloaded when we make a change -->
     <!-- we'll run the webpack dev server on port 8090, so make sure it is correct -->
