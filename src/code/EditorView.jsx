@@ -7,16 +7,6 @@ var EditorView = React.createClass({
     handleNotify() {
         this.forceUpdate()
     },
-    componentDidMount() {
-        this.timer = setInterval(() => {
-            var json = AstNode.stringify(this.props.root)
-            window.localStorage.setItem('ast', json)
-            //console.log ('Saving to localStorage: ', json )
-        }, 5000)
-    },
-    componentWillUnmount() {
-        clearInterval(this.timer)
-    },
     handleClear(){
         this.props.root.children = []
         this.props.root.addChild(new AstNode('', this.props.root))
