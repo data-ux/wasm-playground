@@ -110,7 +110,7 @@ span.ast-node.has-children > input, span.bolded.ast-node{
 }
 span.ast-node input{
     border: 1px solid #eee;
-    background-color: transparent;
+    background-color: #fff;
     padding: 1px 0px 1px 0px;
 }
 span.ast-node input.invalid{
@@ -122,7 +122,6 @@ span.ast-node input:focus{
 }
 span.ast-node input:disabled{
     border: 1px solid #fff;
-    background-color: transparent;
     color: #000;
 }
 span.ast-node.newline{
@@ -148,6 +147,19 @@ span.ast-node.dummy{
 .indentation{
     span.ast-node.newline{
         padding-left: 15px;
+        position: relative;
+    }
+    span.ast-node.newline:before{
+        content: "";
+        display: block;
+        position: absolute;
+        width: 10px;
+        height: 30px;
+        border-left: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        top: -16px;
+        left: 5px;
+        z-index: -10;
     }
     span.ast-node input{
         margin-right: 2px;
