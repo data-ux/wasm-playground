@@ -302,3 +302,16 @@ div.auto-complete-list div.auto-complete-row.active{
     font-weight: 400;
     margin-right: 5px;
 }
+
+/* mobile */
+@media only screen and (max-width : 450px) {
+    .menu-holder{
+        margin-right: 0;
+    }
+    .menu-holder label{
+        display: none;
+    }
+    .info-popup{
+        width: calc(100vw - 30px);
+    }
+}
