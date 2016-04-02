@@ -5,6 +5,7 @@ import focus from './focus'
 import renderers from './renderers'
 import astParser from './astParser'
 
+var focusNextCreated = false;
 
  var AstNodeComponent = React.createClass({
     getInitialState(){
@@ -64,6 +65,8 @@ import astParser from './astParser'
                 var candidate = node.addChildAsFirst()
                 if(astOptions(candidate).length === 0){
                     node.removeChild(candidate)
+                }else{
+                    focusNextCreated = true;
                 }
                 this.props.notifyUp(1)
                 break
@@ -74,6 +77,8 @@ import astParser from './astParser'
                 var candidate = node.parent.addSiblingAfter(node)
                 if(astOptions(candidate).length === 0){
                     node.parent.removeChild(candidate)
+                }else{
+                    focusNextCreated = true;
                 }
                 this.props.notifyUp(1)
                 break
@@ -89,6 +94,7 @@ import astParser from './astParser'
                     e.preventDefault()
                     if(node.parent.frozen && node.parent.isFirstChild(node)){
                         node.parent.addChildAsFirst()
+                        focusNextCreated = true;
                         this.props.notifyUp(1)
                         return
                     }
@@ -103,6 +109,7 @@ import astParser from './astParser'
                             if(this.state.editableText.trim().length === 0){
                                 this.remove()
                             }
+                            focusNextCreated = true;
                             this.props.notifyUp(2)
                             break
                         }
@@ -232,9 +239,10 @@ import astParser from './astParser'
         return callback
     },
     componentDidMount(){
-        if(!this.props.node.invalid){
+        if(!this.props.node.invalid && focusNextCreated){
             this.refs.typeName && this.refs.typeName.focus()
         }
+        focusNextCreated = false;
     },
     handleNotify(generations){
         if(generations === 1 || !generations){
@@ -254,5 +262,9 @@ import astParser from './astParser'
         }
     }
 });
+
+AstNodeComponent.focusNextCreated = function(){
+    focusNextCreated = true
+}
 
 export default AstNodeComponent

@@ -20,7 +20,8 @@ var EditorView = React.createClass({
     handleClear(){
         this.props.root.children = []
         this.props.root.addChild(new AstNode('', this.props.root))
-        this.forceUpdate();
+        AstNodeComponent.focusNextCreated()
+        this.forceUpdate()
     },
     render() {
         return <div className={"editor-view " + this.props.textFormat}><AstNodeComponent node={this.props.root} notifyUp={this.handleNotify} textFormat={this.props.textFormat}/><ClearButton onClear={this.handleClear}/></div>
