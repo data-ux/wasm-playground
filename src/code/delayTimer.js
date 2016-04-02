@@ -1,19 +1,26 @@
-var callback = function(){}
+var timerCallback = function(){}
+var activateCallback = function(){}
 var timer = null
 
 function activateDelay(){
     clearTimeout(timer)
-    timer = setTimeout(callback, 2000)
+    timer = setTimeout(timerCallback, 2000)
+    activateCallback()
 }
 
 function onTimer(cb){
-    callback = cb
+    timerCallback = cb
+}
+
+function onActivate(cb){
+    activateCallback = cb
 }
 
 
 var delayTimer = {
     activateDelay,
-    onTimer
+    onTimer,
+    onActivate
 }
 
 

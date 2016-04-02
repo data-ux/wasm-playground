@@ -43,6 +43,9 @@ var App = React.createClass({
         attachWasm((compileFunc) => {
             this.compile = compileFunc
             this.doCompile()
+            delayTimer.onActivate( () => {
+                this.setState({alert: "Compiling module...", color: "#008800"})
+            })
             delayTimer.onTimer( () => {
                 this.doCompile()
             })
