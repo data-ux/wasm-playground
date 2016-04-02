@@ -39,6 +39,16 @@ function inflateRefs(rule) {
     }
 }
 
+export function getInfixRules(){
+    return astRules.filter( (rule) => {
+        return rule.type === 'rule' &&
+        rule.options.length === 1 &&
+        rule.options[0].children.length === 2 &&
+        rule.options[0].children[0].name === 'expr' &&
+        rule.options[0].children[1].name === 'expr'
+    })
+}
+
 function calculateDecidingDefIndex(rule){
     if(rule.options.length <= 1) return;
     var limit = rule.options[0].children.length
