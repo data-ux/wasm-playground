@@ -1,6 +1,5 @@
 [
     {"name": "factorial", "file": "factorial.wast"},
     {"name": "add integer", "file": "add.wast"},
-    {"name": "add i64", "file": "add_i64.wast"},
     {"name": "linear memory", "file": "linear_memory.wast"}
 ]
