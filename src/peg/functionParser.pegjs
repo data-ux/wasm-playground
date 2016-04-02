@@ -18,10 +18,10 @@ Number "number"=
 	digits:(Decimal / Integer) 
 
 Integer=
-	digits:[0-9]+ { return parseInt(digits.join(""), 10)}
+	digits:([-]? [0-9]+) { return parseInt(digits.join(""), 10)}
 
 Decimal=
-	head:[0-9]+ "." tail:[0-9]+ {return parseFloat(head.join("") + "." + tail.join("") ) }
+	head:([-]? [0-9]+) "." tail:[0-9]+ {return parseFloat(head.join("") + "." + tail.join("") ) }
 
 __=
 	Whitespace*
