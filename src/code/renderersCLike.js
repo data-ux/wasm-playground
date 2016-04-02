@@ -1,5 +1,4 @@
 import React from 'react'
-import measureText from './measureText'
 import AstNodeComponent from './AstNodeComponent'
 import AutoComplete from './AutoComplete'
 import {astFilterOptionsPartial} from './astValidator'
@@ -8,7 +7,6 @@ import {getInfixRules} from './astValidator'
 var varName = /(^\$)|(^[0-9]+$)/
 
 function generic() {
-    var textWidth = measureText(this.state.editableText, this.props.node.children.length)
     var type = this.props.node.type
     var inBlock = false
     var childGen = (child) => {
@@ -22,21 +20,21 @@ function generic() {
              classes.push('newline')
         }
         
-        var endPad = (/(^[if][0-9][0-9]$)|^param$/).test(type) ? '' : ' '
         var typeName 
         if(varName.test(type) && (/^.et_local/).test(this.props.node.parent.type)){
-            typeName = <span className="typeSpan">{type.replace(/^\$/, '')}{endPad}</span>
+            typeName = <span className="typeSpan">{type.replace(/^\$/, '')}</span>
         }else{
-            typeName = <span className="typeSpan">{typeSubstitute(type)}{endPad}</span>
+            typeName = <span className="typeSpan">{typeSubstitute(type)}</span>
         }
         
         
         if(infixTypes[type]){
+            var useParens = infixTypes[this.props.node.parent.type]
             switch(type){
                 case 'set_local':
-                    return <span className={classes.join(' ')}>{this.props.newline ?'':'('}${children[0]}{typeName}{children[1]}{this.props.newline ?'':')'}</span>
+                    return <span className={classes.join(' ')}>{useParens? '(': ''}${children[0]} {typeName} {children[1]}{useParens? ')': ''}</span>
                 default:
-                    return <span className={classes.join(' ')}>{this.props.newline ?'':'('}{children[0]}{typeName}{children[1]}{this.props.newline ?'':')'}</span>
+                    return <span className={classes.join(' ')}>{useParens? '(': ''}{children[0]} {typeName} {children[1]}{useParens? ')': ''}</span>
             }
         }else{
                 var name
@@ -44,33 +42,47 @@ function generic() {
                     name = this.props.node.children[0].type
                 }
             switch(type){
+                case 'module':
+                case 'loop':
+                case 'block':
+                    var i = 0
+                    var names = []
+                    while(varName.test(this.props.node.children[i].type)){
+                        names.push(this.props.node.children[i])
+                        i++
+                    }
+                    names = names.map(childGen)
+                    inBlock = true
+                    var rest = this.props.node.children.slice(i).map(childGen)
+                    return <span className={classes.join(' ')}>{typeName}{names.length ? ' ': ''}{interleaveWith(names, ' ')}{' {'}{rest}{'}'}</span>
                 case 'func':
                     var params = this.props.node.children.filter( (child) => child.type === 'param').map(childGen)
-                    var commaParams = []
-                    params.forEach( (param, i) => {
-                        commaParams.push(param)
-                        if(i < params.length-1) commaParams.push(', ')
-                    })
+                    var commaParams = interleaveWith(params, ', ')
                     var result = this.props.node.children.filter( (child) => child.type === 'result').map(childGen)
                     inBlock = true
                     var rest = this.props.node.children.filter( (child) => !varName.test(child.type) && child.type !== 'param' && child.type !== 'result').map(childGen)
-                    return <span className={classes.join(' ')}>{typeName}{name}({commaParams}){result}{' {'}{rest}{'}'}</span>
-                case 'param':
+                    return <span className={classes.join(' ')}>{typeName} {name}({commaParams}){result}{' {'}{rest}{'}'}</span>
                 case 'local':
+                    var inLocal = true
+                case 'param':
                     if(name){
-                        return <span className={classes.join(' ')}>{typeName}{name}: {childGen(this.props.node.children[1])}</span>
+                        return <span className={classes.join(' ')}>{typeName} {name}: {childGen(this.props.node.children[1])}</span>
                     }else{
                         var commaTypes = []
                         children.forEach( (child, i) => {
-                            commaTypes.push(child)
+                            if(inLocal){
+                                commaTypes.push(<span key={'local'+i}>${i} = {child}</span>)
+                            }else{
+                                commaTypes.push(child)
+                            }
                             if(i < children.length-1) commaTypes.push(', ')
                         })
-                        return <span className={classes.join(' ')}>{typeName}{commaTypes}</span>
+                        return <span className={classes.join(' ')}>{typeName} {commaTypes}</span>
                     }
                 case 'get_local':
-                    return <span className={classes.join(' ')}>{typeName}${children}</span>
+                    return <span className={classes.join(' ')}>{typeName} ${children}</span>
                 default:
-                    return <span className={classes.join(' ')}>{typeName}{charAfterType[type]}{children}{charAtEnd[type]}</span>
+                    return <span className={classes.join(' ')}>{typeName}{children.length ? ' ': ''}{interleaveWith(children, ' ')}</span>
             }
         }
 }
@@ -79,17 +91,16 @@ var renderers = {
     generic
 }
 
-export default renderers
+function interleaveWith(array, thing){
+    var output = []
+    array.forEach( (element, i) => {
+        output.push(element)
+        if(i < array.length - 1) output.push(thing)
+    })
+    return output
+}
 
-let charBeforeType = {
-    
-}
-let charAfterType = {
-    'module': '{'
-}
-let charAtEnd = {
-    'module': '}'
-}
+export default renderers
 
 let infixTypes = {}
 getInfixRules().forEach( (rule) => infixTypes[rule.name] = true)
@@ -106,6 +117,8 @@ var transforms = [
     {rex: /^([^.]*\.)le/, substitution: '<='},
     {rex: /^([^.]*\.)gt/, substitution: '>'},
     {rex: /^([^.]*\.)ge/, substitution: '>='},
+    {rex: /^([^.]*\.)and$/, substitution: '&&'},
+    {rex: /^([^.]*\.)or$/, substitution: '||'},
     {rex: /^([^.]*\.)const/, substitution: ''},
     {rex: /^func$/, substitution: 'function'},
     {rex: /^param$/, substitution: ''},
