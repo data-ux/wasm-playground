@@ -84,6 +84,12 @@ function generic() {
                 var thenBranch = childGen(this.props.node.children[0])
                 var elseBranch = childGen(this.props.node.children[1])
                 return <span className={classes.join(' ')}>{prefix}({test} ? {thenBranch} : {elseBranch})</span>
+            case 'call':
+            case 'call_import':
+            case 'call_indirect':
+                var name = children[0]
+                var rest = interleaveWith(children.slice(1), ', ')
+                return <span className={classes.join(' ')}>{prefix}{name}({rest})</span>
             case 'local':
                 var inLocal = true
             case 'param':
@@ -93,7 +99,7 @@ function generic() {
                     var commaTypes = []
                     children.forEach( (child, i) => {
                         if(inLocal){
-                            commaTypes.push(<span key={'local'+i}>${i} = {child}</span>)
+                            commaTypes.push(<span key={'local'+i}>${i}: {child}</span>)
                         }else{
                             commaTypes.push(child)
                         }
@@ -132,7 +138,10 @@ var directSubstitution = {
     'result': ':',
     'local': 'var',
     'br': 'break',
-    'block': ''
+    'block': '',
+    'call': '',
+    'call_import': '',
+    'call_indirect': ''
 }
 
 var patterns = [
