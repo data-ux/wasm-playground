@@ -3,7 +3,6 @@ import React from 'react'
 import {astOptions, astValidateType, astValidateTypePartial, astFilterOptionsPartial, astGetCompletion, markValidity, markValidityForSiblingsAfter, clearInvalidChildren} from './astValidator'
 import focus from './focus'
 import renderers from './renderers'
-import renderersCLike from './renderersCLike'
 import astParser from './astParser'
 import delayTimer from './delayTimer'
 
@@ -258,9 +257,6 @@ var focusNextCreated = false;
         }
     },
     render(){
-        if(this.props.textFormat === 'c-like'){
-            return renderersCLike['generic'].call(this)
-        }
         var renderesInUse = renderers[this.props.textFormat]
 
         var candidate = renderesInUse[this.props.node.type]

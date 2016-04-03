@@ -3,6 +3,7 @@ import measureText from './measureText'
 import AstNodeComponent from './AstNodeComponent'
 import AutoComplete from './AutoComplete'
 import {astFilterOptionsPartial} from './astValidator'
+import rendererCLike from './rendererCLike'
 
 var varName = /(^\$)|(^[0-9]+$)/
 
@@ -108,6 +109,9 @@ var renderers = {
         set_local: afterFirst,
         get_local: afterFirst,
         generic: noChildrenFlat
+    },
+    "c-like":{
+        generic: rendererCLike
     }
 }
 

@@ -181,8 +181,14 @@ span.ast-node.dummy{
     }
 }
 .c-like{
+    span.ast-node.newline{
+        padding-left: 20px;
+    }
     span.ast-node{
         line-height: 22px;
+    }
+    span.ast-node.return:before{
+        content: "return "
     }
 }
 
