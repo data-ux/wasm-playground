@@ -121,4 +121,11 @@ var App = React.createClass({
     }
 })
 
+// Prevent Backspace browser history navigation
+document.body.addEventListener('keydown', function(e) {
+    if(e.code === 'Backspace' && e.target.tagName.toLowerCase() !== 'input'){
+        e.preventDefault();
+    }
+})
+
 ReactDOM.render(<App />, document.getElementById('react-target'))
