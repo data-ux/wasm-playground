@@ -79,6 +79,11 @@ function generic() {
                 inBlock = elseParens
                 var elseBranch = childGen(this.props.node.children[2])
                 return <span className={classes.join(' ')}>{prefix}{typeName} ({test}) {thenParens?'{':''}{thenBranch}{thenParens?'}':''}{elseBranch ? ' else ': ''}{elseParens?'{':''}{elseBranch}{elseParens?'}':''}</span>
+            case 'select':
+                var test = childGen(this.props.node.children[2])
+                var thenBranch = childGen(this.props.node.children[0])
+                var elseBranch = childGen(this.props.node.children[1])
+                return <span className={classes.join(' ')}>{prefix}({test} ? {thenBranch} : {elseBranch})</span>
             case 'local':
                 var inLocal = true
             case 'param':
