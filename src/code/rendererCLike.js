@@ -21,8 +21,9 @@ function generic() {
     if (this.props.newline) {
         classes.push('newline')
     }
+    var prefix
     if (this.props.injectReturn) {
-        classes.push('return')
+        prefix = 'return '
     }
     
     var typeName 
@@ -37,9 +38,9 @@ function generic() {
         var useParens = infixTypes[this.props.node.parent.type]
         switch(type){
             case 'set_local':
-                return <span className={classes.join(' ')}>{useParens? '(': ''}${children[0]} {typeName} {children[1]}{useParens? ')': ''}</span>
+                return <span className={classes.join(' ')}>{prefix}{useParens? '(': ''}${children[0]} {typeName} {children[1]}{useParens? ')': ''}</span>
             default:
-                return <span className={classes.join(' ')}>{useParens? '(': ''}{children[0]} {typeName} {children[1]}{useParens? ')': ''}</span>
+                return <span className={classes.join(' ')}>{prefix}{useParens? '(': ''}{children[0]} {typeName} {children[1]}{useParens? ')': ''}</span>
         }
     }else{
             var name
@@ -60,7 +61,7 @@ function generic() {
                 names = names.map(childGen)
                 inBlock = true
                 var rest = this.props.node.children.slice(i).map(childGen)
-                return <span className={classes.join(' ')}>{typeName}{names.length ? ' ': ''}{interleaveWith(names, ' ')}{' {'}{rest}{'}'}</span>
+                return <span className={classes.join(' ')}>{prefix}{typeName}{names.length ? ' ': ''}{interleaveWith(names, ' ')}{' {'}{rest}{'}'}</span>
             case 'func':
                 var params = this.props.node.children.filter( (child) => child.type === 'param').map(childGen)
                 var commaParams = interleaveWith(params, ', ')
@@ -68,7 +69,7 @@ function generic() {
                 inBlock = true
                 injectReturn = true
                 var rest = this.props.node.children.filter( (child) => !varName.test(child.type) && child.type !== 'param' && child.type !== 'result').map(childGen)
-                return <span className={classes.join(' ')}>{typeName} {name}({commaParams}){result}{' {'}{rest}{'}'}</span>
+                return <span className={classes.join(' ')}>{prefix}{typeName} {name}({commaParams}){result}{' {'}{rest}{'}'}</span>
             case 'if':
                 var test = children[0]
                 var thenParens = this.props.node.children[1] && this.props.node.children[1].type !== 'block'
@@ -77,12 +78,12 @@ function generic() {
                 var thenBranch = childGen(this.props.node.children[1])
                 inBlock = elseParens
                 var elseBranch = childGen(this.props.node.children[2])
-                return <span className={classes.join(' ')}>{typeName} ({test}) {thenParens?'{':''}{thenBranch}{thenParens?'}':''}{elseBranch ? ' else ': ''}{elseParens?'{':''}{elseBranch}{elseParens?'}':''}</span>
+                return <span className={classes.join(' ')}>{prefix}{typeName} ({test}) {thenParens?'{':''}{thenBranch}{thenParens?'}':''}{elseBranch ? ' else ': ''}{elseParens?'{':''}{elseBranch}{elseParens?'}':''}</span>
             case 'local':
                 var inLocal = true
             case 'param':
                 if(name){
-                    return <span className={classes.join(' ')}>{typeName}{inLocal?' ':''}{name}: {childGen(this.props.node.children[1])}</span>
+                    return <span className={classes.join(' ')}>{prefix}{typeName}{inLocal?' ':''}{name}: {childGen(this.props.node.children[1])}</span>
                 }else{
                     var commaTypes = []
                     children.forEach( (child, i) => {
@@ -93,12 +94,12 @@ function generic() {
                         }
                         if(i < children.length-1) commaTypes.push(', ')
                     })
-                    return <span className={classes.join(' ')}>{typeName} {commaTypes}</span>
+                    return <span className={classes.join(' ')}>{prefix}{typeName} {commaTypes}</span>
                 }
             case 'get_local':
-                return <span className={classes.join(' ')}>{typeName}${children}</span>
+                return <span className={classes.join(' ')}>{prefix}{typeName}${children}</span>
             default:
-                return <span className={classes.join(' ')}>{typeName}{children.length ? ' ': ''}{interleaveWith(children, ' ')}</span>
+                return <span className={classes.join(' ')}>{prefix}{typeName}{children.length ? ' ': ''}{interleaveWith(children, ' ')}</span>
         }
     }
 }

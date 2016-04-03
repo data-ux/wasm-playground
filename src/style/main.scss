@@ -187,9 +187,6 @@ span.ast-node.dummy{
     span.ast-node{
         line-height: 22px;
     }
-    span.ast-node.return:before{
-        content: "return "
-    }
 }
 
 /* auto complete */
