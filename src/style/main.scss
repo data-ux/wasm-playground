@@ -146,26 +146,38 @@ span.ast-node.dummy{
 }
 .indentation{
     span.ast-node.newline{
-        padding-left: 15px;
-        position: relative;
+        padding-left: 20px;
     }
+    /*
     span.ast-node.newline:before{
         content: "";
         display: block;
         position: absolute;
-        width: 10px;
-        height: 30px;
-        border-left: 1px solid #ccc;
+        width: 15px;
+        height: 14px;
         border-bottom: 1px solid #ccc;
-        top: -16px;
+        top: 0px;
         left: 5px;
         z-index: -10;
     }
+    span.ast-node:after{
+        content: "";
+        display: block;
+        position: absolute;
+        border-left: 1px solid #ccc;
+        width: 1px;
+        top: 25px;
+        bottom: 12px;
+        left: 20px;
+        z-index: -10;
+    }
+    */
     span.ast-node input{
         margin-right: 2px;
     }
     span.ast-node{
         line-height: 27px;
+        position: relative;
     }
 }
 .c-like{
