@@ -1,17 +1,17 @@
 (module
-  (func $even (param $n i32) (result i32)
+  (func $even (param $n f64) (result f64)
     (select 
-      (i32.const 1)
-      (call $odd (i32.sub (get_local $n) (i32.const 1)))
-      (i32.eq (get_local $n) (i32.const 0))
+      (f64.const 1)
+      (call $odd (f64.sub (get_local $n) (f64.const 1)))
+      (f64.eq (get_local $n) (f64.const 0))
     )
   )
 
-  (func $odd (param $n i32) (result i32)
+  (func $odd (param $n f64) (result f64)
     (select 
-      (i32.const 0)
-      (call $even (i32.sub (get_local $n) (i32.const 1)))
-      (i32.eq (get_local $n) (i32.const 0))
+      (f64.const 0)
+      (call $even (f64.sub (get_local $n) (f64.const 1)))
+      (f64.eq (get_local $n) (f64.const 0))
     )
   )
   

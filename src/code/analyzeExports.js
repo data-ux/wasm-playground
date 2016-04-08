@@ -1,4 +1,5 @@
 export default function analyzeExports(root, exports){
+    return '...'
     var exportNames = root.children
         .filter( (c) => c.type === "export")
         .map(function(child){

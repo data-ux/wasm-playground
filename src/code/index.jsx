@@ -22,7 +22,7 @@ require("../style/main.scss")
 
 var App = React.createClass({
     getInitialState(){
-        var initialExamples = [{name: 'add integer', code: '(module(func $add (param $x i32) (param $y i32) (result i32) (i32.add (get_local $x) (get_local $y)))(export "add" $add))'}]
+        var initialExamples = [{name: 'add', code: '(module(func $add (param $x f64) (param $y f64) (result f64) (f64.add (get_local $x) (get_local $y)))(export "add" $add))'}]
         var rootNode =  astParser(initialExamples[0].code)
         rootNode.setFrozen(true)
         
@@ -81,15 +81,9 @@ var App = React.createClass({
             return
         }
         
-        var func = exports[parsed.functionName]
-        if(!func){
-            this.setState({output: {count : this.state.output.count + 1, msg: "Error: Unknown export function. Available exports: " + analyzeExports(this.state.rootNode, exports)}})
-            return
-        }
-        
         var result
         try{
-            result = func.apply(null, parsed.args)
+            result = exports(parsed.functionName, parsed.args)
         }catch(e){
             this.setState({output: {count : this.state.output.count + 1, msg: "Error: Called function threw exception"}})
             console.log(e)
