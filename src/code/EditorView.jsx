@@ -23,8 +23,8 @@ var EditorView = React.createClass({
             <div className='scroll-area'>
                 <AstNodeComponent node={this.props.root} notifyUp={this.handleNotify} textFormat={this.props.textFormat}/>
             </div>
-            <ClearButton onClear={this.handleClear}/>
             {message}
+            <ClearButton onClear={this.handleClear}/>
         </div>
         )
     }
