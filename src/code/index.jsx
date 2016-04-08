@@ -64,7 +64,7 @@ var App = React.createClass({
         if(exports === null){
             this.setState({exports: exports, alert: "Syntax error. Failed to compile module.", color: "#880000"})
         }else{
-            this.setState({exports: exports, alert: "Module valid. Available exports: " + analyzeExports(this.state.rootNode, exports), color: "#008800"})
+            this.setState({exports: exports, alert: "Module valid. Available exports: " + analyzeExports(this.state.rootNode), color: "#008800"})
         }
     },
     handleConsoleCommand(command){

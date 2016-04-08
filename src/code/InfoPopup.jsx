@@ -30,6 +30,9 @@ var InfoPopup = React.createClass({
             <tr><td><strong>Tab:</strong></td><td> Add new node after current node</td></tr>
             </tbody>
             </table>
+            <p>
+            Known limitations: Export function arguments & results must be of f64 type.
+            </p>
             <div className='button-row'><p className='credits'>Created by <a href="https://github.com/data-ux/" target="_blank">Jan Wolski</a>. Powered by <a href="https://github.com/WebAssembly/binaryen" target="_blank">binaryen</a>.</p><button onClick={this.handleClick} onMouseDown={prevent}>Got it!</button></div>
             </div>
             )
