@@ -1,4 +1,5 @@
-export default function analyzeExports(root, exports){
+export default function analyzeExports(root){
+
     var exportNames = root.children
         .filter( (c) => c.type === "export")
         .map(function(child){
@@ -10,14 +11,8 @@ export default function analyzeExports(root, exports){
         .map(function(child){
             return {name: child.children[0].type, func: child}
     })
-    
-    var validExports = Object.keys(exports).map(function(name){
-        return exportNames.find(function(ex){
-            return ex.name === name
-        })
-    })
 
-    var validFuncs = validExports.map(function(ex){
+    var validFuncs = exportNames.map(function(ex){
         var targetFunc = funcs.find(function(func){
             return func.name === ex.funcName
         })

@@ -19,10 +19,9 @@ var HeaderBar = React.createClass({
 })
 
 var formats = [
-    
     {className: 's-expression', name: 's-expression'},
     {className: 'indentation', name: 'indentation'},
-    {className: 'c-like', name: 'c-like'}
+    {className: 'c-like', name: 'js-like'}
 ]
 
 export default HeaderBar

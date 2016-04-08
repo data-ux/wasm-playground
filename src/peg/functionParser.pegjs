@@ -1,6 +1,6 @@
 start=
 	__ name:Identifier __ args:ArgumentList {
-    	return {functionName: name, args: args}
+    	return {functionName: name, args: args[0] === null ? [] : args}
     }
     
 ArgumentList=
@@ -18,10 +18,13 @@ Number "number"=
 	digits:(Decimal / Integer) 
 
 Integer=
-	digits:([-]? [0-9]+) { return parseInt(digits.join(""), 10)}
+	head:NumberStart { return parseInt(head, 10)}
 
 Decimal=
-	head:([-]? [0-9]+) "." tail:[0-9]+ {return parseFloat(head.join("") + "." + tail.join("") ) }
+	head:NumberStart "." tail:[0-9]+ {return parseFloat(head + "." + tail.join("") ) }
+
+NumberStart=
+    head:"-"? tail:[0-9]+ {return (head ? head : '') + tail.join("")}
 
 __=
 	Whitespace*
