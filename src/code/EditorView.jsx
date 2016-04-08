@@ -14,12 +14,17 @@ var EditorView = React.createClass({
         this.forceUpdate()
     },
     render() {
+        var message
+        if(this.props.textFormat === 'c-like'){
+            message = (<div className="editor-message"><span>Editing disabled with this text format</span></div>)
+        }
         return (
         <div className={"editor-view " + this.props.textFormat}>
             <div className='scroll-area'>
                 <AstNodeComponent node={this.props.root} notifyUp={this.handleNotify} textFormat={this.props.textFormat}/>
             </div>
             <ClearButton onClear={this.handleClear}/>
+            {message}
         </div>
         )
     }
