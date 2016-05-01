@@ -22,7 +22,7 @@ require("../style/main.scss")
 
 var App = React.createClass({
     getInitialState(){
-        var initialExamples = [{name: 'add', code: '(module(func $add (param $x f64) (param $y f64) (result f64) (f64.add (get_local $x) (get_local $y)))(export "add" $add))'}]
+        var initialExamples = [{name: 'add', code: '(module(func $add (param $x i32) (param $y i32) (result i32) (i32.add (get_local $x) (get_local $y)))(export "add" $add))'}]
         var rootNode =  astParser(initialExamples[0].code)
         rootNode.setFrozen(true)
         
@@ -54,17 +54,19 @@ var App = React.createClass({
     doCompile(){
         var str = astPrinter(this.state.rootNode)
         var exports
+        var argTypes = analyzeExports(this.state.rootNode)
         try {
-            exports = this.compile(str)
+            exports = this.compile(str, argTypes)
         } catch (e) {
             console.log(e)
             exports = null
         }
+        var availableExports = Object.keys(argTypes).map((key) => key + '(' + argTypes[key].join(', ') + ')').join(', ')
         
         if(exports === null){
             this.setState({exports: exports, alert: "Syntax error. Failed to compile module.", color: "#880000"})
         }else{
-            this.setState({exports: exports, alert: "Module valid. Available exports: " + analyzeExports(this.state.rootNode), color: "#008800"})
+            this.setState({exports: exports, alert: "Module valid. Available exports: " + availableExports, color: "#008800"})
         }
     },
     handleConsoleCommand(command){

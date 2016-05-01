@@ -1,7 +1,7 @@
 export default function analyzeExports(root){
 
     var exportNames = root.children
-        .filter( (c) => c.type === "export")
+        .filter( (c) => c.type === "export" && c.children.length > 1)
         .map(function(child){
             return {name: child.children[0].type.replace(/["]+/g, ''), funcName: child.children[1].type}
     })
@@ -22,8 +22,10 @@ export default function analyzeExports(root){
         return targetFunc
         
     }).filter( (o) => o )
+    
+    var argTypes = {};
 
-    return validFuncs.map(function(e){
+    validFuncs.forEach(function(e){
         var params = []
         e.func.children.filter(function(child){
             return child.type === "param" && child.children.length > 0
@@ -34,7 +36,7 @@ export default function analyzeExports(root){
                 child.children.forEach( (child) => {params.push(child.type)})
             }
         })
-        return e.exportName + "(" + params.join(", ") + ")"
-    }).join(", ")
-     
+        argTypes[e.exportName] = params
+    })
+    return argTypes
 }
