@@ -5,7 +5,7 @@ export default function attachWasm(callback){
         var loadWasm = function(code, lookupImport) {
             var binaryen = Binaryen()
 
-            var module = new binaryen.AllocatingModule()
+            var module = new binaryen.Module()
             var parser = new binaryen.SExpressionParser(code)
 
             var s_module = parser.get_root().getChild(0)
@@ -22,7 +22,7 @@ export default function attachWasm(callback){
                 argsArray.forEach( (argument) => {
                     args.push_back(new binaryen.Literal(argument))
                 })
-
+                
                 return  instance.callExport(name, args).getf64()
             }
         }
