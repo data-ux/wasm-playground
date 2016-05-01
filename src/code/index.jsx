@@ -22,7 +22,7 @@ require("../style/main.scss")
 
 var App = React.createClass({
     getInitialState(){
-        var initialExamples = [{name: 'add', code: '(module(func $add (param $x f64) (param $y f64) (result f64) (f64.add (get_local $x) (get_local $y)))(export "add" $add))'}]
+        var initialExamples = [{name: 'add', code: '(module(func $add (param $x i32) (param $y i32) (result i32) (i32.add (get_local $x) (get_local $y)))(export "add" $add))'}]
         var rootNode =  astParser(initialExamples[0].code)
         rootNode.setFrozen(true)
         
