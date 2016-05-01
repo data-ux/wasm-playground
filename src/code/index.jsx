@@ -54,17 +54,19 @@ var App = React.createClass({
     doCompile(){
         var str = astPrinter(this.state.rootNode)
         var exports
+        var argTypes = analyzeExports(this.state.rootNode)
         try {
-            exports = this.compile(str)
+            exports = this.compile(str, argTypes)
         } catch (e) {
             console.log(e)
             exports = null
         }
+        var availableExports = Object.keys(argTypes).map((key) => key + '(' + argTypes[key].join(', ') + ')').join(', ')
         
         if(exports === null){
             this.setState({exports: exports, alert: "Syntax error. Failed to compile module.", color: "#880000"})
         }else{
-            this.setState({exports: exports, alert: "Module valid. Available exports: " + analyzeExports(this.state.rootNode), color: "#008800"})
+            this.setState({exports: exports, alert: "Module valid. Available exports: " + availableExports, color: "#008800"})
         }
     },
     handleConsoleCommand(command){
