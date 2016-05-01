@@ -31,7 +31,7 @@ var InfoPopup = React.createClass({
             </tbody>
             </table>
             <p>
-            Known limitations: Export function arguments & results must be of f64 type.
+            Known limitations: Export function argument & result type i64 not supported.
             </p>
             <div className='button-row'><p className='credits'>Created by <a href="https://github.com/data-ux/" target="_blank">Jan Wolski</a>. Powered by <a href="https://github.com/WebAssembly/binaryen" target="_blank">binaryen</a>.</p><button onClick={this.handleClick} onMouseDown={prevent}>Got it!</button></div>
             </div>
