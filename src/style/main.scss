@@ -252,7 +252,7 @@ div.auto-complete-list div.auto-complete-row.active{
     height: 25px;
     padding: 5px 5px;
 }
-.info-holder button{
+.info-holder button, .copy-button-holder button{
     border: 1px solid rgba(255,255,255,1);
     border-radius: 4px;
     background: #fff;
@@ -316,6 +316,18 @@ div.auto-complete-list div.auto-complete-row.active{
     bottom: -1px;
     left: 0;
 }
+
+/* Save button */
+
+.copy-button-holder button{
+    margin-top: 10px;
+    border: 1px solid rgba(33, 150, 243, 1);
+}
+.copy-button-holder button:focus{
+    outline: 0;
+}
+
+
 
 /* Dropdown menu */
 .menu-holder{
