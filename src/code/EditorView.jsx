@@ -2,6 +2,7 @@ import React from 'react'
 
 import AstNodeComponent from './AstNodeComponent'
 import AstNode from './AstNode'
+import SaveButton from './SaveButton'
 
 var EditorView = React.createClass({
     handleNotify() {
@@ -22,6 +23,7 @@ var EditorView = React.createClass({
         <div className={"editor-view " + this.props.textFormat}>
             <div className='scroll-area'>
                 <AstNodeComponent node={this.props.root} notifyUp={this.handleNotify} textFormat={this.props.textFormat}/>
+                <SaveButton node={this.props.root}/>
             </div>
             {message}
             <ClearButton onClear={this.handleClear}/>

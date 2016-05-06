@@ -1,0 +1,22 @@
+(module
+  (func $fibonacci (param $i i32) (result i32)
+    (local $a i32)
+    (local $b i32)
+    (local $tmp i32)
+    (set_local $a (i32.const 1))
+    (set_local $b (i32.const 0))
+    (loop $done $loop
+      (if (i32.le_s (get_local $i)(i32.const 1))(br $done)
+        (block
+          (set_local $tmp (get_local $a))
+          (set_local $a (i32.add (get_local $a)(get_local $b)))
+          (set_local $b (get_local $tmp))
+          (set_local $i (i32.sub (get_local $i)(i32.const 1)))
+        )
+      )
+      (br $loop)
+    )
+    (get_local $a)
+  )
+  (export "fib" $fibonacci)
+)
