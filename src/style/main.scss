@@ -324,6 +324,19 @@ div.auto-complete-list div.auto-complete-row.active{
     height: 25px;
     padding: 5px;
     margin-right: 5px;
+    position: relative;
+}
+.menu-holder:after{
+    content: "";
+    position: absolute;
+    display: block;
+    right: 10px;
+    top: 17px;
+    width: 0; 
+	height: 0; 
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid #fff;
 }
 .menu-holder select{
     border: 1px solid rgba(255,255,255,1);
@@ -334,8 +347,14 @@ div.auto-complete-list div.auto-complete-row.active{
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 14px;
     font-weight: 400;
-    -moz-appearance: none;
     cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0 20px 0 5px;
+}
+.menu-holder select::-ms-expand {
+    display: none;
 }
 .menu-holder select:focus{
     outline: none;
