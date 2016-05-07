@@ -365,6 +365,11 @@ div.auto-complete-list div.auto-complete-row.active{
     appearance: none;
     padding: 0 20px 0 5px;
 }
+
+.menu-holder select option {
+    color:black
+}
+
 .menu-holder select::-ms-expand {
     display: none;
 }
