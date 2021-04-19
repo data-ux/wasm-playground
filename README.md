@@ -1,7 +1,7 @@
 # WebAssembly Playground
 Playground for writing and running WebAssembly code.
 
-In action: http://ast.run/
+In action: http://data-ux.github.io/wasm-playground/
 
 ## How to run locally
 * `npm install`
